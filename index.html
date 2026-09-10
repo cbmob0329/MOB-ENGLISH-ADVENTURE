@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#fff7e8">
-<title>JUNIOR ENGLISH 1085 V6</title>
+<title>JUNIOR ENGLISH 1535 V9</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="app">
 <header class="top">
   <div class="toprow">
-    <div class="brand">JUNIOR ENGLISH<small>中学生コア英単語 1,085・V6</small></div>
+    <div class="brand">JUNIOR ENGLISH<small>中学生コア英単語 1,535・V8</small></div>
     <div class="wallet">
       <div class="pill coin">🪙 <span id="coinCount">0</span></div>
       <div class="pill streak">🔥 <span id="streakCount">0</span></div>
@@ -28,7 +28,7 @@
     <h1>毎日少しずつ、<br>英単語を自分のものに。</h1>
     <p>中学生向けの基礎〜高校受験レベルを、一覧・検索・テストで反復学習できます。</p>
     <div class="stats">
-      <div class="stat"><b id="totalWords">1085</b><span>WORDS</span></div>
+      <div class="stat"><b id="totalWords">1535</b><span>WORDS</span></div>
       <div class="stat"><b id="learnedToday">0</b><span>TODAY</span></div>
       <div class="stat"><b id="homeAccuracy">--</b><span>DAILY SCORE</span></div>
     </div>
@@ -41,6 +41,7 @@
     <button class="action green" onclick="goPage('quiz')"><div class="icon">✏️</div><b>10単語テスト</b><p>ランダム10問ですぐ復習</p></button>
     <button class="action pink" onclick="goPage('daily')"><div class="icon">🎁</div><b>今日の50問</b><p>1日1回の報酬チャレンジ</p></button>
     <button class="action boss" onclick="goPage('boss')"><div class="icon">👾</div><b>ボスクエスト</b><p>英単語でモンスターを倒そう</p></button>
+    <button class="action review" onclick="goPage('review')"><div class="icon">🎯</div><b>苦手単語 <span id="homeWeakCount">0</span></b><p>間違えた単語を集中復習</p></button>
   </div>
 
   <div class="daily-banner" onclick="goPage('daily')" role="button">
@@ -54,8 +55,8 @@
 
   <div class="section-title"><h2>この単語集について</h2></div>
   <div class="about">
-    <h3>1,085語を収録</h3>
-    中学校で頻出する基礎語〜高校受験の土台となる語を中心に1,085語を収録しています。各単語には日本語の意味とカタカナ読みを付けています。
+    <h3>1,535語を収録</h3>
+    中学校で使いやすい基礎語〜高校受験の土台となる語を中心に1,535語を収録しています。各単語には日本語の意味とカタカナ読みを付け、🔊ボタンから端末の英語音声で発音を確認できます。
     <br><small>※ 学年区分とカタカナ読みは学習用の目安です。教科書・地域・発音によって差があります。</small>
   </div>
 </section>
@@ -70,6 +71,12 @@
     <button class="grade-chip" data-grade="2">中2目安</button>
     <button class="grade-chip" data-grade="3">中3目安</button>
   </div>
+  <div class="filters mastery-filters" id="wordMasteryFilters">
+    <button class="grade-chip active" data-mastery="all">学習状態すべて</button>
+    <button class="grade-chip" data-mastery="weak">苦手</button>
+    <button class="grade-chip" data-mastery="learning">復習中</button>
+    <button class="grade-chip" data-mastery="mastered">習得済み</button>
+  </div>
   <div class="word-count" id="wordCount"></div>
   <div class="word-list" id="wordList"></div>
 </section>
@@ -78,14 +85,18 @@
   <div class="page-head"><h2>10単語テスト</h2><span style="font-size:11px;color:#6d7482">何度でも挑戦OK</span></div>
   <div id="quizSetup" class="setup">
     <h3>出題範囲</h3>
-    <p>出題方向を選べます。カタカナ読みは答え合わせのあとに表示します。</p>
+    <p>出題方法を選べます。リスニングでは英単語を画面に出さず、🔊音声を聞いて答えます。カタカナ読みは答え合わせのあとに表示します。</p>
     <div style="font-size:11px;font-weight:1000;margin-top:6px">問題タイプ</div>
-    <div class="mode-row" id="quizModeFilters">
-      <button class="mode-chip active" data-mode="mix">ミックス</button>
-      <button class="mode-chip" data-mode="en2jp">英語 → 意味</button>
-      <button class="mode-chip" data-mode="jp2en">意味 → 英語</button>
+    <div class="mode-grid" id="quizModeFilters">
+      <button class="mode-chip active" data-mode="mix">🎲 ミックス</button>
+      <button class="mode-chip" data-mode="en2jp">🇬🇧 英語 → 意味</button>
+      <button class="mode-chip" data-mode="jp2en">🇯🇵 意味 → 英語</button>
+      <button class="mode-chip" data-mode="listen2jp">🔊 音声 → 意味</button>
+      <button class="mode-chip" data-mode="listen2en">🎧 音声 → 英単語</button>
     </div>
-    <div style="font-size:11px;font-weight:1000;margin-bottom:8px">学年</div>
+    <div style="font-size:11px;font-weight:1000;margin-bottom:8px">ジャンル</div>
+    <div class="genre-grid" id="quizGenreFilters"></div>
+    <div style="font-size:11px;font-weight:1000;margin:13px 0 8px">学年</div>
     <div class="filters" id="quizGradeFilters">
       <button class="grade-chip active" data-grade="0">全学年</button>
       <button class="grade-chip" data-grade="1">中1</button>
@@ -106,7 +117,17 @@
   </div>
   <div id="dailySetup" class="setup">
     <h3>🎁 1日1回の報酬</h3>
-    <p>毎日固定の50問に挑戦。途中で画面を閉じても続きから再開できます。報酬を受け取れるのはその日1回だけです。</p>
+    <p>好きなジャンルを選んで50問に挑戦。開始後はその日のジャンルが固定され、途中から続けられます。報酬を受け取れるのはその日1回だけです。</p>
+    <div style="font-size:11px;font-weight:1000;margin:10px 0 8px">今日のジャンル</div>
+    <div class="genre-grid" id="dailyGenreFilters"></div>
+    <div style="font-size:11px;font-weight:1000;margin:13px 0 8px">問題タイプ</div>
+    <div class="mode-grid" id="dailyModeFilters">
+      <button class="mode-chip active" data-mode="mix">🎲 ミックス</button>
+      <button class="mode-chip" data-mode="en2jp">🇬🇧 英語 → 意味</button>
+      <button class="mode-chip" data-mode="jp2en">🇯🇵 意味 → 英語</button>
+      <button class="mode-chip" data-mode="listen2jp">🔊 音声 → 意味</button>
+      <button class="mode-chip" data-mode="listen2en">🎧 音声 → 英単語</button>
+    </div>
     <div style="display:grid;gap:7px;font-size:12px;font-weight:900;margin:13px 0">
       <div>✅ 正解40〜44問：+50 COIN</div>
       <div>🏅 正解45〜49問：+100 COIN</div>
@@ -115,6 +136,24 @@
     <button class="startbtn" id="dailyStartBtn" onclick="startDaily()">今日の50問を始める</button>
   </div>
   <div id="dailyArea" style="display:none"></div>
+</section>
+
+<section class="page" id="reviewPage">
+  <div class="page-head"><h2>苦手単語・復習</h2><span style="font-size:11px;color:#6d7482;font-weight:900">MASTERY</span></div>
+  <div class="mastery-summary">
+    <div class="mastery-stat weak"><b id="reviewWeakCount">0</b><span>苦手</span></div>
+    <div class="mastery-stat learning"><b id="reviewLearningCount">0</b><span>復習中</span></div>
+    <div class="mastery-stat mastered"><b id="reviewMasteredCount">0</b><span>習得済み</span></div>
+  </div>
+  <div class="setup" id="reviewSetup">
+    <h3>🎯 苦手を集中して覚える</h3>
+    <p>間違えた単語は「苦手」に登録されます。その後、正解すると「復習中」になり、3回連続正解で「習得済み」になります。</p>
+    <button class="startbtn" id="weakQuizBtn" onclick="startReviewQuiz(false)">苦手単語だけ復習（最大10問）</button>
+    <button class="review-secondary" id="learningQuizBtn" onclick="startReviewQuiz(true)">苦手＋復習中をまとめて復習</button>
+  </div>
+  <div id="reviewQuizArea" style="display:none"></div>
+  <div class="section-title"><h2>現在の苦手単語</h2><span id="reviewListCount"></span></div>
+  <div class="review-list" id="reviewWordList"></div>
 </section>
 
 <section class="page" id="bossPage">
@@ -132,7 +171,7 @@
       </div>
     </div>
     <div style="font-size:11px;line-height:1.8;font-weight:850">
-      ⚔️ 通常攻撃：正解で 1 DAMAGE<br>
+      ⚔️ 通常：1.5秒以内 2 DAMAGE / 3秒以内 1 DAMAGE<br>
       💥 必殺：1バトル1回 / 難問・6択 / 正解で 4 DAMAGE<br>
       ❌ ミス / TIME UP：こちらが 1 DAMAGE
     </div>
