@@ -1,5 +1,5 @@
-const STORAGE_KEY = "juniorEnglish1535_v9";
-const LEGACY_KEYS = ["juniorEnglish1535_v8","juniorEnglish1535_v7"];
+const STORAGE_KEY = "juniorEnglish1535_v10";
+const LEGACY_KEYS = ["juniorEnglish1535_v9","juniorEnglish1535_v8","juniorEnglish1535_v7"];
 const state = loadState();
 let listLetter="ALL", listGrade=0, listMastery="all", quizGrade=0, quizMode="mix", quizGenre="all", dailyGenre="all", dailyMode="mix";
 let quiz=null, reviewQuiz=null, dailyQuiz=null, boss=null;
@@ -92,7 +92,18 @@ function modeName(mode){
   return mode==="en2jp"?"英語 → 意味":
     mode==="jp2en"?"意味 → 英語":
     mode==="listen2jp"?"音声 → 意味":
-    mode==="listen2en"?"音声 → 英単語":"ミックス";
+    mode==="listen2en"?"音声 → 英単語":
+    mode==="spell_jp2en"?"意味 → スペル":
+    mode==="spell_listen2en"?"音声 → スペル":"ミックス";
+}
+function isSpellingType(type){return type==="spell_jp2en"||type==="spell_listen2en"}
+function normalizeSpelling(value){
+  return String(value??"")
+    .normalize("NFKC")
+    .trim()
+    .toLowerCase()
+    .replace(/[’‘]/g,"'")
+    .replace(/\s+/g," ");
 }
 
 function getMastery(word){
@@ -113,7 +124,7 @@ function updateMasteryUI(){const c=masteryCounts();const ids={homeWeakCount:c.we
 function buildMistake(q,chosen){return {word:q.w.word,kana:q.w.kana,meaning:q.w.meaning,reverse:!!q.reverse,chosen:chosen??"未回答",answer:q.answer}}
 function renderMistakeResult(items=[],compact=false){
   if(!items.length)return compact?"":`<div class="all-correct-card">🎉 間違えた問題はありません！</div>`;
-  const cards=items.map(m=>`<div class="mistake-card"><div><span class="mistake-word">${esc(m.word)}</span><span class="mistake-kana">${esc(m.kana||"")}</span></div><div class="mistake-meaning">${esc(m.meaning||"")}</div><div class="mistake-answer"><div class="mine">あなたの答え：${esc(m.chosen||"未回答")}</div><div class="correct-answer">正解：${esc(m.answer||"")}</div></div><button class="result-speak" data-speak="${esc(m.word)}">🔊 発音</button></div>`).join("");
+  const cards=items.map(m=>`<div class="mistake-card"><div><span class="mistake-word">${esc(m.word)}</span><span class="mistake-kana">${esc(m.kana||"")}</span></div><div class="mistake-meaning">${esc(m.meaning||"")}</div><div class="mistake-answer"><div class="mine">あなたの答え：<span class="spell-result-value">${esc(m.chosen||"未回答")}</span></div><div class="correct-answer">正解：${esc(m.answer||"")}</div></div><button class="result-speak" data-speak="${esc(m.word)}">🔊 発音</button></div>`).join("");
   if(compact)return `<div class="boss-result-mistakes"><div style="font-size:10px;font-weight:1000;margin-bottom:5px">間違えた問題 ${items.length}</div>${cards}</div>`;
   return `<div class="result-detail"><h4>間違えた問題 ${items.length}問</h4><div class="mistake-list">${cards}</div><div class="review-result-note">この単語は自動で「苦手単語」に登録されました。</div></div>`;
 }
@@ -212,15 +223,26 @@ function renderWords(){
   bindSpeakButtons(el);
 }
 function createQuestionsFromWords(chosen,direction="mix",choiceCount=4,pool=WORDS,rng=Math.random){
-  const types=["en2jp","jp2en","listen2jp","listen2en"];
+  const selectTypes=["en2jp","jp2en","listen2jp","listen2en"];
   return chosen.map(w=>{
-    const type=direction==="mix"?types[Math.floor(rng()*types.length)]:direction;
-    const answerEnglish=type==="jp2en"||type==="listen2en";
+    const type=direction==="mix"?selectTypes[Math.floor(rng()*selectTypes.length)]:direction;
+    const spelling=isSpellingType(type);
+    const answerEnglish=type==="jp2en"||type==="listen2en"||spelling;
     const distractPool=pool.filter(x=>x.word!==w.word);
-    let choices=answerEnglish?sample(distractPool,choiceCount-1,rng).map(x=>x.word):sample(distractPool,choiceCount-1,rng).map(x=>x.meaning);
-    choices.push(answerEnglish?w.word:w.meaning);
-    choices=shuffle(choices,rng);
-    return {w,type,reverse:type==="jp2en",listening:type==="listen2jp"||type==="listen2en",choices,answer:answerEnglish?w.word:w.meaning};
+    let choices=[];
+    if(!spelling){
+      choices=answerEnglish?sample(distractPool,choiceCount-1,rng).map(x=>x.word):sample(distractPool,choiceCount-1,rng).map(x=>x.meaning);
+      choices.push(answerEnglish?w.word:w.meaning);
+      choices=shuffle(choices,rng);
+    }
+    return {
+      w,type,
+      reverse:type==="jp2en",
+      listening:type==="listen2jp"||type==="listen2en"||type==="spell_listen2en",
+      spelling,
+      choices,
+      answer:answerEnglish?w.word:w.meaning
+    };
   });
 }
 function createQuestionPool(count,grade=0,rng=Math.random,direction="mix",choiceCount=4,genre="all"){
@@ -230,27 +252,170 @@ function createQuestionPool(count,grade=0,rng=Math.random,direction="mix",choice
 function renderQuestion(target,qobj,index,total,score,mode){
   const q=qobj[index];
   const type=q.type||(q.listening?(q.answer===q.w.word?"listen2en":"listen2jp"):(q.reverse?"jp2en":"en2jp"));
-  const listening=type==="listen2jp"||type==="listen2en";
-  const prompt=type==="jp2en"?q.w.meaning:q.w.word;
+  const spelling=isSpellingType(type);
+  const listening=type==="listen2jp"||type==="listen2en"||type==="spell_listen2en";
+  const prompt=type==="jp2en"||type==="spell_jp2en"?q.w.meaning:q.w.word;
   const label=type==="jp2en"?"日本語に合う英単語を選ぼう":
     type==="listen2jp"?"音声を聞いて意味を選ぼう":
-    type==="listen2en"?"音声を聞いて英単語を選ぼう":"英単語の意味を選ぼう";
+    type==="listen2en"?"音声を聞いて英単語を選ぼう":
+    type==="spell_jp2en"?"日本語の意味を見て英単語を入力しよう":
+    type==="spell_listen2en"?"音声を聞いて英単語を入力しよう":"英単語の意味を選ぼう";
   const title=mode==="daily"?"TODAY 50":mode==="review"?"WEAK WORD REVIEW":"10 WORD TEST";
   const genre=mode==="daily"?genreName(state.daily?.genre||dailyGenre):mode==="quiz"?genreName(quiz?.genre||quizGenre):"苦手復習";
-  const promptHTML=listening
-    ? `<div class="listening-prompt"><div class="listen-icon">🎧</div><button class="speak-btn" data-speak="${esc(q.w.word)}">🔊 音声を聞く</button><div class="listen-copy">何度でも再生できます</div></div>`
-    : `<div class="prompt">${esc(prompt)}</div>${type==="en2jp"?`<div style="text-align:center"><button class="result-speak" data-speak="${esc(q.w.word)}">🔊 発音</button></div>`:""}`;
-  target.innerHTML=`<div class="quiz-shell"><div class="quiz-meta"><span>${title} · ${genre}</span><span>${index+1} / ${total}　正解 ${score}</span></div><div class="quiz-progress"><i style="width:${(index/total)*100}%"></i></div><div class="prompt-label">${label}</div>${promptHTML}<div class="prompt-kana"></div><div class="options">${q.choices.map(c=>`<button class="option" data-choice="${esc(c)}">${esc(c)}</button>`).join("")}</div><div class="feedback"></div><button class="nextbtn">次の問題へ</button></div>`;
-  target.querySelectorAll(".option").forEach(btn=>btn.addEventListener("click",()=>answerQuestion(target,q,index,total,mode,btn)));
+
+  let promptHTML="";
+  if(type==="spell_listen2en"){
+    promptHTML=`<div class="spelling-audio-prompt"><div class="listen-icon">🎧</div><button class="speak-btn" data-speak="${esc(q.w.word)}">🔊 音声を聞く</button><div class="listen-copy">聞こえた単語を入力</div></div>`;
+  }else if(listening){
+    promptHTML=`<div class="listening-prompt"><div class="listen-icon">🎧</div><button class="speak-btn" data-speak="${esc(q.w.word)}">🔊 音声を聞く</button><div class="listen-copy">何度でも再生できます</div></div>`;
+  }else{
+    promptHTML=`<div class="prompt">${esc(prompt)}</div>${type==="en2jp"?`<div style="text-align:center"><button class="result-speak" data-speak="${esc(q.w.word)}">🔊 発音</button></div>`:""}`;
+  }
+
+  const answerHTML=spelling
+    ? `<form class="spelling-wrap" id="spellingForm">
+        <div class="spelling-box">
+          <input id="spellingInput" class="spelling-input" type="text" inputmode="text"
+            autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
+            enterkeyhint="done" placeholder="英単語を入力" aria-label="英単語を入力">
+          <div class="spelling-actions">
+            <button type="button" class="spell-hint-btn" id="spellHintBtn">💡 ヒント</button>
+            <button type="submit" class="spell-submit-btn">決定</button>
+          </div>
+          <div class="spell-hint" id="spellHint"></div>
+        </div>
+      </form>`
+    : `<div class="options">${q.choices.map(c=>`<button class="option" data-choice="${esc(c)}">${esc(c)}</button>`).join("")}</div>`;
+
+  target.innerHTML=`<div class="quiz-shell">
+    <div class="quiz-meta"><span>${title} · ${genre}</span><span>${index+1} / ${total}　正解 ${score}</span></div>
+    <div class="quiz-progress"><i style="width:${(index/total)*100}%"></i></div>
+    <div class="prompt-label">${label}</div>
+    ${promptHTML}
+    <div class="prompt-kana"></div>
+    ${answerHTML}
+    <div class="feedback"></div>
+    <button class="nextbtn">次の問題へ</button>
+  </div>`;
+
+  if(spelling){
+    const form=target.querySelector("#spellingForm");
+    const input=target.querySelector("#spellingInput");
+    const hintBtn=target.querySelector("#spellHintBtn");
+    form.addEventListener("submit",e=>{
+      e.preventDefault();
+      submitSpelling(target,q,index,total,mode);
+    });
+    hintBtn.addEventListener("click",()=>{
+      const hint=target.querySelector("#spellHint");
+      hint.textContent=`最初の文字：${q.w.word.charAt(0).toUpperCase()}`;
+      hintBtn.disabled=true;
+      if(input)input.focus();
+    });
+  }else{
+    target.querySelectorAll(".option").forEach(btn=>btn.addEventListener("click",()=>answerQuestion(target,q,index,total,mode,btn)));
+  }
   bindSpeakButtons(target);
 }
-function answerQuestion(target,q,index,total,mode,clicked){
-  if(target.dataset.answered==="1")return;target.dataset.answered="1";const chosen=clicked.dataset.choice,correct=chosen===q.answer;target.querySelectorAll(".option").forEach(b=>{b.disabled=true;if(b.dataset.choice===q.answer)b.classList.add("correct");else if(b===clicked)b.classList.add("wrong")});const fb=target.querySelector(".feedback");fb.className="feedback show "+(correct?"ok":"ng");fb.innerHTML=(correct?"✓ 正解！":"✕ 不正解")+`<br><div class="audio-answer-row"><span>${esc(q.w.word)} <span style="color:#5277c7">${esc(q.w.kana)}</span> ＝ ${esc(q.w.meaning)}</span><button class="result-speak" data-speak="${esc(q.w.word)}">🔊</button></div>`;bindSpeakButtons(fb);recordWordResult(q.w,correct,mode);
-  if(mode==="quiz"){if(correct)quiz.score++;else quiz.mistakes.push(buildMistake(q,chosen))}else if(mode==="review"){if(correct)reviewQuiz.score++;else reviewQuiz.mistakes.push(buildMistake(q,chosen))}else{if(correct)dailyQuiz.score++;else dailyQuiz.mistakes.push(buildMistake(q,chosen));state.daily.pos=index+1;state.daily.score=dailyQuiz.score;state.daily.mistakes=dailyQuiz.mistakes}saveState();
-  const next=target.querySelector(".nextbtn");next.classList.add("show");next.textContent=index===total-1?"結果を見る":"次の問題へ";next.onclick=()=>{target.dataset.answered="0";if(mode==="quiz"){quiz.pos++;quiz.pos>=total?finishQuiz():renderQuestion(target,quiz.questions,quiz.pos,total,quiz.score,"quiz")}else if(mode==="review"){reviewQuiz.pos++;reviewQuiz.pos>=total?finishReviewQuiz():renderQuestion(target,reviewQuiz.questions,reviewQuiz.pos,total,reviewQuiz.score,"review")}else{dailyQuiz.pos++;state.daily.pos=dailyQuiz.pos;state.daily.score=dailyQuiz.score;state.daily.mistakes=dailyQuiz.mistakes;saveState();dailyQuiz.pos>=total?finishDaily():renderQuestion(target,dailyQuiz.questions,dailyQuiz.pos,total,dailyQuiz.score,"daily")}};
+
+function registerQuestionResult(q,correct,chosen,mode){
+  recordWordResult(q.w,correct,mode);
+  if(mode==="quiz"){
+    if(correct)quiz.score++;
+    else quiz.mistakes.push(buildMistake(q,chosen));
+  }else if(mode==="review"){
+    if(correct)reviewQuiz.score++;
+    else reviewQuiz.mistakes.push(buildMistake(q,chosen));
+  }else{
+    if(correct)dailyQuiz.score++;
+    else dailyQuiz.mistakes.push(buildMistake(q,chosen));
+  }
 }
-function startQuiz(count){const questions=createQuestionPool(count,quizGrade,Math.random,quizMode,4,quizGenre);quiz={questions,pos:0,score:0,genre:quizGenre,mistakes:[]};document.getElementById("quizSetup").style.display="none";const area=document.getElementById("quizArea");area.style.display="block";area.dataset.answered="0";renderQuestion(area,questions,0,questions.length,0,"quiz")}
-function finishQuiz(){const area=document.getElementById("quizArea"),total=quiz.questions.length,pct=Math.round(quiz.score/total*100);let msg=pct===100?"PERFECT！":pct>=80?"かなり覚えています！":pct>=60?"あと少し！":"間違えた単語をもう一度見てみよう。";area.innerHTML=`<div class="quiz-shell result"><div class="score-ring"><div><b>${quiz.score}/${total}</b><span>${pct}%</span></div></div><h3>${msg}</h3><p>${genreName(quiz.genre||"all")}のテスト結果です。</p>${renderMistakeResult(quiz.mistakes)}<button class="startbtn" onclick="resetQuiz()">もう一度挑戦</button>${quiz.mistakes.length?`<button class="review-secondary" onclick="goPage('review')">苦手単語を復習する</button>`:""}</div>`;bindSpeakButtons(area);renderWords();updateMasteryUI()}
+
+function setQuestionFeedback(target,q,correct){
+  const fb=target.querySelector(".feedback");
+  fb.className="feedback show "+(correct?"ok":"ng");
+  fb.innerHTML=(correct?"✓ 正解！":"✕ 不正解")+`<br><div class="audio-answer-row"><span><span class="spell-result-value">${esc(q.w.word)}</span> <span style="color:#5277c7">${esc(q.w.kana)}</span> ＝ ${esc(q.w.meaning)}</span><button class="result-speak" data-speak="${esc(q.w.word)}">🔊</button></div>`;
+  bindSpeakButtons(fb);
+}
+
+function showNextQuestionButton(target,index,total,mode){
+  const next=target.querySelector(".nextbtn");
+  next.classList.add("show");
+  next.textContent=index===total-1?"結果を見る":"次の問題へ";
+  next.onclick=()=>{
+    target.dataset.answered="0";
+    if(mode==="quiz"){
+      quiz.pos++;
+      quiz.pos>=total?finishQuiz():renderQuestion(target,quiz.questions,quiz.pos,total,quiz.score,"quiz");
+    }else if(mode==="review"){
+      reviewQuiz.pos++;
+      reviewQuiz.pos>=total?finishReviewQuiz():renderQuestion(target,reviewQuiz.questions,reviewQuiz.pos,total,reviewQuiz.score,"review");
+    }else{
+      dailyQuiz.pos++;
+      state.daily.pos=dailyQuiz.pos;
+      state.daily.score=dailyQuiz.score;
+      state.daily.mistakes=dailyQuiz.mistakes;
+      saveState();
+      dailyQuiz.pos>=total?finishDaily():renderQuestion(target,dailyQuiz.questions,dailyQuiz.pos,total,dailyQuiz.score,"daily");
+    }
+  };
+}
+
+function persistCurrentQuestionProgress(index,mode){
+  if(mode==="daily"){
+    state.daily.pos=index+1;
+    state.daily.score=dailyQuiz.score;
+    state.daily.mistakes=dailyQuiz.mistakes;
+  }
+  saveState();
+}
+
+function answerQuestion(target,q,index,total,mode,clicked){
+  if(target.dataset.answered==="1")return;
+  target.dataset.answered="1";
+  const chosen=clicked.dataset.choice;
+  const correct=chosen===q.answer;
+
+  target.querySelectorAll(".option").forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.choice===q.answer)b.classList.add("correct");
+    else if(b===clicked)b.classList.add("wrong");
+  });
+
+  setQuestionFeedback(target,q,correct);
+  registerQuestionResult(q,correct,chosen,mode);
+  persistCurrentQuestionProgress(index,mode);
+  showNextQuestionButton(target,index,total,mode);
+}
+
+function submitSpelling(target,q,index,total,mode){
+  if(target.dataset.answered==="1")return;
+  const input=target.querySelector("#spellingInput");
+  if(!input)return;
+  const chosen=input.value.trim();
+  if(!chosen){
+    input.focus();
+    toast("英単語を入力してください");
+    return;
+  }
+
+  target.dataset.answered="1";
+  const correct=normalizeSpelling(chosen)===normalizeSpelling(q.answer);
+  input.disabled=true;
+  input.classList.add(correct?"correct":"wrong");
+  const submit=target.querySelector(".spell-submit-btn");
+  const hint=target.querySelector("#spellHintBtn");
+  if(submit)submit.disabled=true;
+  if(hint)hint.disabled=true;
+
+  setQuestionFeedback(target,q,correct);
+  registerQuestionResult(q,correct,chosen,mode);
+  persistCurrentQuestionProgress(index,mode);
+  showNextQuestionButton(target,index,total,mode);
+}
+function startQuiz(count){const questions=createQuestionPool(count,quizGrade,Math.random,quizMode,4,quizGenre);quiz={questions,pos:0,score:0,genre:quizGenre,mode:quizMode,mistakes:[]};document.getElementById("quizSetup").style.display="none";const area=document.getElementById("quizArea");area.style.display="block";area.dataset.answered="0";renderQuestion(area,questions,0,questions.length,0,"quiz")}
+function finishQuiz(){const area=document.getElementById("quizArea"),total=quiz.questions.length,pct=Math.round(quiz.score/total*100);let msg=pct===100?"PERFECT！":pct>=80?"かなり覚えています！":pct>=60?"あと少し！":"間違えた単語をもう一度見てみよう。";area.innerHTML=`<div class="quiz-shell result"><div class="score-ring"><div><b>${quiz.score}/${total}</b><span>${pct}%</span></div></div><h3>${msg}</h3><p>${genreName(quiz.genre||"all")}・${modeName(quiz.mode||"mix")}のテスト結果です。</p>${renderMistakeResult(quiz.mistakes)}<button class="startbtn" onclick="resetQuiz()">もう一度挑戦</button>${quiz.mistakes.length?`<button class="review-secondary" onclick="goPage('review')">苦手単語を復習する</button>`:""}</div>`;bindSpeakButtons(area);renderWords();updateMasteryUI()}
 function resetQuiz(){document.getElementById("quizArea").style.display="none";document.getElementById("quizSetup").style.display="block";quiz=null}
 function renderReviewPage(){
   const c=masteryCounts();updateMasteryUI();const weak=WORDS.filter(w=>masteryStatus(w.word)==="weak");const list=document.getElementById("reviewWordList"),count=document.getElementById("reviewListCount");if(count)count.textContent=`${weak.length}語`;if(list)list.innerHTML=weak.length?weak.slice(0,100).map(w=>`<div class="review-item"><div><div class="en">${esc(w.word)}</div><div class="kana">${esc(w.kana)}</div><div class="jp">${esc(w.meaning)}</div></div><div class="word-side"><button class="word-speak" data-speak="${esc(w.word)}">🔊</button>${masteryBadgeHTML(w.word)}</div></div>`).join(""):`<div class="empty">現在「苦手」の単語はありません。テストで間違えると自動でここに追加されます。</div>`;const weakBtn=document.getElementById("weakQuizBtn"),learningBtn=document.getElementById("learningQuizBtn");if(weakBtn){weakBtn.disabled=c.weak===0;weakBtn.textContent=c.weak?`苦手単語だけ復習（${Math.min(10,c.weak)}問）`:"苦手単語はありません"}if(learningBtn){learningBtn.disabled=(c.weak+c.learning)===0;learningBtn.textContent=(c.weak+c.learning)?`苦手＋復習中をまとめて復習（最大10問）`:"復習対象の単語はありません"}bindSpeakButtons(document.getElementById("reviewWordList"));
@@ -270,9 +435,9 @@ function ensureDaily(requestedGenre=null,requestedMode=null){
   const chosen=requestedGenre||dailyGenre||"all";
   const chosenMode=requestedMode||dailyMode||"mix";
   if(!state.daily||state.daily.date!==key){
-    const rng=mulberry32(hashSeed("JUNIOR-ENGLISH-"+key+"-"+chosen));
+    const rng=mulberry32(hashSeed("JUNIOR-ENGLISH-"+key+"-"+chosen+"-"+chosenMode));
     const qs=createQuestionPool(50,0,rng,chosenMode,4,chosen);
-    state.daily={date:key,genre:chosen,mode:chosenMode,pos:0,score:0,completed:false,reward:0,mistakes:[],questions:qs.map(q=>({word:q.w.word,type:q.type,reverse:q.reverse,listening:q.listening,choices:q.choices,answer:q.answer}))};
+    state.daily={date:key,genre:chosen,mode:chosenMode,pos:0,score:0,completed:false,reward:0,mistakes:[],questions:qs.map(q=>({word:q.w.word,type:q.type,reverse:q.reverse,listening:q.listening,spelling:q.spelling,choices:q.choices,answer:q.answer}))};
     try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch(e){}
   }
   if(!Array.isArray(state.daily.mistakes))state.daily.mistakes=[];
@@ -282,7 +447,7 @@ function ensureDaily(requestedGenre=null,requestedMode=null){
 function hydrateDailyQuestions(saved){
   return saved.questions.map(x=>{
     const w=WORDS.find(z=>z.word===x.word);
-    return {w,type:x.type||(x.reverse?"jp2en":"en2jp"),reverse:!!x.reverse,listening:!!x.listening,choices:x.choices,answer:x.answer};
+    const type=x.type||(x.reverse?"jp2en":"en2jp");return {w,type,reverse:!!x.reverse,listening:!!x.listening||type==="spell_listen2en",spelling:!!x.spelling||isSpellingType(type),choices:Array.isArray(x.choices)?x.choices:[],answer:x.answer};
   });
 }
 function startDaily(){
@@ -314,7 +479,7 @@ function showDailyResult(){
   let title=d.score===50?"PERFECT DAY！":d.score>=45?"GREAT！":d.score>=40?"CLEAR！":"FINISH！";
   area.innerHTML=`<div class="quiz-shell result">
     <div class="score-ring"><div><b>${d.score}/50</b><span>${pct}%</span></div></div>
-    <h3>${title}</h3><p>${genreName(d.genre||"all")}の50問を完了しました。<br>明日は別ジャンルも選べます。</p>
+    <h3>${title}</h3><p>${genreName(d.genre||"all")}・${modeName(d.mode||"mix")}の50問を完了しました。<br>明日は別ジャンルや問題タイプも選べます。</p>
     <div class="reward-card">🎁 本日の報酬：+${d.reward||0} COIN</div>
     ${renderMistakeResult(d.mistakes||[])}
     <button class="startbtn" onclick="goPage('review')">苦手単語を復習する</button>

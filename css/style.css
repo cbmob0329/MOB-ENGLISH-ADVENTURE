@@ -554,3 +554,126 @@ main{padding:16px}
   .mode-grid .mode-chip{min-height:45px;font-size:10px;padding:7px 5px}
   .listening-prompt .speak-btn{min-width:165px}
 }
+
+
+/* V10: spelling input questions */
+.mode-chip.spell-mode{
+  border-color:#cbb7ec;
+  background:#faf6ff;
+}
+.mode-chip.spell-mode.active{
+  background:#6e43a8;
+  color:#fff;
+  border-color:#6e43a8;
+}
+.spell-note{
+  margin:-7px 0 15px;
+  padding:9px 11px;
+  border-radius:12px;
+  background:#f7f2ff;
+  color:#66488f;
+  font-size:10px;
+  line-height:1.55;
+  font-weight:800;
+}
+.spelling-wrap{
+  margin:18px auto 4px;
+  width:min(100%,520px);
+}
+.spelling-box{
+  background:#f7f9fd;
+  border:1.5px solid #dce3ef;
+  border-radius:18px;
+  padding:12px;
+}
+.spelling-input{
+  display:block;
+  width:100%;
+  min-height:58px;
+  border:2px solid #cbd4e2;
+  background:#fff;
+  color:#172033;
+  border-radius:15px;
+  padding:11px 14px;
+  font-size:22px;
+  font-weight:1000;
+  letter-spacing:.3px;
+  text-align:center;
+  outline:none;
+  -webkit-appearance:none;
+}
+.spelling-input:focus{
+  border-color:#527fe2;
+  box-shadow:0 0 0 3px rgba(82,127,226,.12);
+}
+.spelling-input.correct{
+  border-color:#42ad73;
+  background:#eaf9f1;
+  color:#14784a;
+}
+.spelling-input.wrong{
+  border-color:#e66767;
+  background:#fff0f0;
+  color:#a73636;
+}
+.spelling-actions{
+  display:grid;
+  grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);
+  gap:8px;
+  margin-top:9px;
+}
+.spell-hint-btn,.spell-submit-btn{
+  min-height:48px;
+  border-radius:13px;
+  font-weight:1000;
+  padding:9px 10px;
+}
+.spell-hint-btn{
+  border:1px solid #d9dce3;
+  background:#fff;
+  color:#626a78;
+}
+.spell-submit-btn{
+  border:0;
+  background:#17233d;
+  color:#fff;
+}
+.spell-submit-btn:disabled,.spell-hint-btn:disabled{
+  opacity:.45;
+}
+.spell-hint{
+  min-height:24px;
+  margin-top:8px;
+  text-align:center;
+  color:#7652a6;
+  font-size:12px;
+  font-weight:1000;
+}
+.spelling-audio-prompt{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:96px;
+  margin-top:7px;
+}
+.spelling-audio-prompt .listen-icon{font-size:31px}
+.spelling-audio-prompt .speak-btn{
+  min-width:190px;
+  min-height:52px;
+  border-radius:16px;
+  border:2px solid #9eb9f5;
+  background:#dfeaff;
+  color:#1d55bc;
+  font-size:14px;
+}
+.spell-result-value{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-weight:900;
+}
+@media(max-width:380px){
+  .spelling-input{min-height:53px;font-size:20px}
+  .spelling-actions{grid-template-columns:1fr 1.3fr}
+  .spell-hint-btn,.spell-submit-btn{min-height:45px;font-size:11px}
+}
