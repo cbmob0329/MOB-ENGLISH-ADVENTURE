@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fff7e8">
+<title>JUNIOR ENGLISH 1085 V5</title>
+<style>
+:root{
+  --bg:#fff7e8;--card:#ffffff;--ink:#172033;--muted:#6d7482;
+  --line:#e7dcc7;--gold:#f0b429;--gold2:#ffcf5c;--blue:#2f74ff;
+  --green:#27a96b;--red:#e55454;--nav:#18223a;--shadow:0 10px 30px rgba(42,32,14,.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif}
+body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{max-width:760px;margin:0 auto}
+.top{
+  position:sticky;top:0;z-index:30;background:rgba(255,247,232,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,180,145,.35);
+  padding:calc(10px + env(safe-area-inset-top)) 16px 10px
+}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-weight:1000;letter-spacing:.4px;line-height:1}
+.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:1.6px;margin-top:5px}
+.wallet{display:flex;gap:8px}
+.pill{
+  background:#fff;border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.05);
+  border-radius:999px;padding:8px 11px;font-size:12px;font-weight:900;white-space:nowrap
+}
+.coin{color:#9d6500}.streak{color:#d75c28}
+main{padding:16px}
+.page{display:none}.page.active{display:block}
+.hero{
+  background:linear-gradient(145deg,#1d2947,#2c3f70);color:#fff;border-radius:24px;
+  padding:22px;box-shadow:var(--shadow);position:relative;overflow:hidden
+}
+.hero:after{
+  content:"ABC";position:absolute;right:-12px;bottom:-20px;font-weight:1000;font-size:95px;
+  color:rgba(255,255,255,.06);letter-spacing:-10px
+}
+.eyebrow{font-size:11px;font-weight:900;letter-spacing:1.6px;color:#ffd574}
+.hero h1{margin:6px 0 8px;font-size:27px;line-height:1.2}
+.hero p{margin:0;color:#d9e3ff;font-size:13px;line-height:1.65;max-width:460px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px}
+.stat{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px}
+.stat b{display:block;font-size:20px}.stat span{font-size:10px;color:#d9e3ff;font-weight:800}
+.section-title{display:flex;align-items:end;justify-content:space-between;margin:22px 2px 10px;gap:12px}
+.section-title h2{margin:0;font-size:17px}.section-title span{font-size:11px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.action{
+  border:0;background:#fff;border-radius:20px;padding:17px;text-align:left;box-shadow:var(--shadow);
+  min-height:128px;position:relative;overflow:hidden
+}
+.action .icon{font-size:26px}.action b{display:block;font-size:15px;margin-top:12px}.action p{font-size:11px;line-height:1.5;color:var(--muted);margin:5px 0 0}
+.action.primary{background:#f7c54e}.action.blue{background:#dfeaff}.action.green{background:#ddf5e8}.action.pink{background:#ffe4df}.action.boss{background:#e9ddff}
+.daily-banner{
+  margin-top:12px;background:#fff;border:2px solid #f1c24f;border-radius:22px;padding:17px;box-shadow:var(--shadow)
+}
+.daily-row{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.daily-badge{background:#18223a;color:white;border-radius:14px;padding:10px 12px;font-weight:1000;font-size:12px}
+.reward{font-size:12px;color:#875b00;font-weight:900}
+.progress-track{height:9px;background:#eee6d6;border-radius:99px;overflow:hidden;margin-top:12px}
+.progress-bar{height:100%;width:0;background:#efb62f;transition:.3s}
+.searchbox{
+  position:sticky;top:71px;z-index:20;background:var(--bg);padding:2px 0 10px
+}
+.searchbox input{
+  width:100%;border:1.5px solid var(--line);background:#fff;border-radius:17px;padding:14px 15px;
+  outline:none;font-size:16px;box-shadow:0 4px 18px rgba(0,0,0,.04)
+}
+.searchbox input:focus{border-color:#8caef5}
+.letters{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+.letters::-webkit-scrollbar{display:none}
+.letter,.grade-chip{
+  border:1px solid var(--line);background:#fff;border-radius:11px;min-width:38px;height:36px;font-weight:900;color:#444
+}
+.letter.active,.grade-chip.active{background:var(--nav);color:#fff;border-color:var(--nav)}
+.filters{display:flex;gap:7px;margin-bottom:11px}
+.grade-chip{padding:0 11px;min-width:auto;font-size:12px}
+.word-count{font-size:11px;color:var(--muted);font-weight:800;margin:5px 2px 10px}
+.word-list{display:grid;gap:8px}
+.word-card{
+  background:#fff;border:1px solid #eee5d6;border-radius:17px;padding:13px 14px;
+  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center
+}
+.word-main{min-width:0}.word-en{font-size:18px;font-weight:1000;letter-spacing:.2px}.word-kana{font-size:11px;color:#3566c9;font-weight:900;margin-top:2px}
+.word-jp{font-size:12px;color:#525967;margin-top:6px;line-height:1.45}
+.grade-tag{font-size:10px;border-radius:999px;padding:6px 8px;background:#f0f3f9;color:#495169;font-weight:900}
+.empty{background:#fff;border-radius:18px;padding:30px;text-align:center;color:var(--muted)}
+.page-head{display:flex;align-items:center;justify-content:space-between;margin:2px 0 14px}
+.page-head h2{margin:0;font-size:20px}.backbtn{border:0;background:#fff;border-radius:12px;padding:9px 12px;font-weight:900}
+.quiz-shell{background:#fff;border-radius:24px;padding:18px;box-shadow:var(--shadow);min-height:410px}
+.quiz-meta{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:900;color:var(--muted)}
+.quiz-progress{height:8px;background:#eee;border-radius:99px;overflow:hidden;margin:12px 0 24px}
+.quiz-progress i{display:block;height:100%;background:var(--blue);width:0;transition:.25s}
+.prompt-label{font-size:11px;color:#8b91a0;font-weight:900;text-align:center}
+.prompt{font-size:31px;font-weight:1000;text-align:center;margin:8px 0 3px;line-height:1.25;word-break:break-word}
+.prompt-kana{text-align:center;font-size:13px;color:#5277c7;font-weight:900;min-height:20px}
+.options{display:grid;gap:10px;margin-top:23px}
+.option{
+  border:1.5px solid #e1e4ea;background:#fff;border-radius:16px;padding:14px 13px;text-align:left;
+  font-weight:850;color:#232b3c;transition:.12s
+}
+.option:active{transform:scale(.99)}.option.correct{border-color:#44b67c;background:#eaf9f1;color:#147b4a}
+.option.wrong{border-color:#ed6b6b;background:#fff0f0;color:#bb3030}
+.option:disabled{cursor:default}
+.feedback{min-height:44px;margin-top:13px;border-radius:14px;padding:10px 12px;font-size:12px;line-height:1.5;font-weight:800;display:none}
+.feedback.show{display:block}.feedback.ok{background:#eaf9f1;color:#166a43}.feedback.ng{background:#fff1f0;color:#a84040}
+.nextbtn,.startbtn{
+  width:100%;border:0;border-radius:16px;background:#17233d;color:#fff;font-weight:1000;padding:14px;margin-top:13px
+}
+.nextbtn{display:none}.nextbtn.show{display:block}
+.setup{background:#fff;border-radius:22px;padding:18px;box-shadow:var(--shadow)}
+.setup h3{margin:0 0 5px}.setup p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 15px}
+.setup .filters{margin:0 0 10px}
+.result{text-align:center;padding:22px 8px}.score-ring{
+  width:132px;height:132px;border-radius:50%;margin:10px auto 18px;display:grid;place-items:center;
+  background:#17233d;color:white;border:8px solid #f4c44c
+}
+.score-ring b{font-size:33px}.score-ring span{font-size:11px;display:block;color:#dae2f3}
+.result h3{font-size:22px;margin:0 0 7px}.result p{color:var(--muted);font-size:13px;line-height:1.6}
+.reward-card{background:#fff6d7;border:1px solid #f2d275;border-radius:16px;padding:13px;margin-top:14px;color:#805a00;font-weight:900}
+.daily-info{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 13px}
+.daily-info div{background:#fff;border-radius:14px;padding:11px;text-align:center;border:1px solid var(--line)}
+.daily-info b{font-size:16px;display:block}.daily-info span{font-size:9px;color:var(--muted);font-weight:900}
+.about{background:#fff;border-radius:22px;padding:18px;box-shadow:var(--shadow);font-size:13px;line-height:1.8;color:#4d5563}
+.about h3{margin-top:0;color:#172033}
+.nav{
+  position:fixed;z-index:50;left:50%;transform:translateX(-50%);bottom:0;width:min(760px,100%);
+  background:#17233d;color:white;display:grid;grid-template-columns:repeat(5,1fr);
+  padding:7px 8px calc(7px + env(safe-area-inset-bottom));border-radius:22px 22px 0 0
+}
+.nav button{border:0;background:transparent;color:#aeb8ce;padding:7px 4px 5px;font-size:9px;font-weight:900}
+.nav button span{display:block;font-size:19px;margin-bottom:2px}.nav button.active{color:#ffd15d}
+.toast{
+  position:fixed;z-index:100;left:50%;bottom:100px;transform:translate(-50%,20px);
+  background:#111b31;color:white;border-radius:999px;padding:10px 16px;font-size:12px;font-weight:900;
+  opacity:0;pointer-events:none;transition:.25s;white-space:nowrap
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:420px){
+  main{padding:13px}.hero{padding:19px}.hero h1{font-size:24px}.stats{gap:6px}.stat{padding:10px}
+  .grid{gap:9px}.action{padding:15px;min-height:124px}.prompt{font-size:28px}
+}
+
+
+
+.mode-row{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 16px}
+.mode-chip{
+  border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 11px;
+  font-size:11px;font-weight:900;color:#434a59
+}
+.mode-chip.active{background:#17233d;color:#fff;border-color:#17233d}
+.boss-card{
+  background:linear-gradient(145deg,#211a3c,#3d2b68);color:#fff;border-radius:24px;
+  padding:18px;box-shadow:var(--shadow);overflow:hidden;position:relative
+}
+.boss-card h3{margin:0 0 5px;font-size:22px}.boss-card p{margin:0;color:#dcd4f4;font-size:12px;line-height:1.6}
+.boss-card .startbtn{background:#f0c248;color:#2b2100}
+.boss-preview{display:flex;align-items:center;gap:17px;margin:15px 0}
+.slime{
+  width:104px;height:78px;border-radius:52% 52% 44% 44% / 65% 65% 35% 35%;
+  background:#6ad66d;border:5px solid #173b25;position:relative;flex:0 0 auto;
+  box-shadow:inset 0 -12px 0 rgba(0,0,0,.09)
+}
+.slime:before,.slime:after{
+  content:"";position:absolute;width:12px;height:17px;background:#172033;border-radius:50%;top:28px
+}
+.slime:before{left:27px}.slime:after{right:27px}
+.slime-mouth{position:absolute;width:25px;height:8px;border-bottom:4px solid #173b25;border-radius:50%;left:50%;top:49px;transform:translateX(-50%)}
+.boss-mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;flex:1}
+.boss-mini-stats div{background:rgba(255,255,255,.1);border-radius:13px;padding:9px;text-align:center}
+.boss-mini-stats b{font-size:16px;display:block}.boss-mini-stats span{font-size:8px;color:#dcd4f4;font-weight:900}
+.boss-arena{
+  background:linear-gradient(#dff0ff 0 56%,#d9c795 56% 100%);border-radius:24px;
+  min-height:610px;box-shadow:var(--shadow);overflow:hidden;position:relative;padding:14px
+}
+.battle-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.fighter-label{font-size:11px;font-weight:1000;letter-spacing:.8px}
+.hp-wrap{flex:1}.hp-track{height:12px;background:rgba(23,32,51,.18);border:2px solid #172033;border-radius:99px;overflow:hidden}
+.hp-fill{height:100%;background:#4fbd70;transition:width .28s}.hp-fill.enemy{background:#e86659}
+.hp-text{font-size:10px;font-weight:1000;margin-top:3px}
+.battle-stage{height:255px;position:relative;display:flex;align-items:flex-end;justify-content:space-between;padding:18px 24px 20px}
+.player-unit,.enemy-unit{position:relative;text-align:center;transform-origin:center bottom}
+.player-unit{width:100px}.enemy-unit{width:135px}
+.player-avatar{
+  width:78px;height:94px;margin:auto;background:#f4c94f;border:5px solid #172033;border-radius:38px 38px 25px 25px;
+  position:relative;box-shadow:inset 0 -12px 0 rgba(0,0,0,.09)
+}
+.player-avatar:before,.player-avatar:after{
+  content:"";position:absolute;background:#172033;width:9px;height:13px;border-radius:50%;top:29px
+}
+.player-avatar:before{left:20px}.player-avatar:after{right:20px}
+.player-sword{position:absolute;width:10px;height:62px;background:#eaf1fa;border:3px solid #172033;right:-15px;top:8px;transform:rotate(28deg);border-radius:6px}
+.player-sword:after{content:"";position:absolute;width:28px;height:8px;background:#8a5e35;border:3px solid #172033;left:-12px;bottom:-5px;border-radius:5px}
+.enemy-unit .slime{width:128px;height:96px;margin:auto;border-width:6px}
+.enemy-unit .slime:before,.enemy-unit .slime:after{top:35px;width:14px;height:20px}
+.enemy-unit .slime:before{left:34px}.enemy-unit .slime:after{right:34px}
+.enemy-unit .slime-mouth{top:61px}
+.battle-shadow{width:86px;height:14px;border-radius:50%;background:rgba(0,0,0,.17);margin:8px auto 0}
+.battle-message{
+  position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:9;
+  background:#17233d;color:#fff;border-radius:999px;padding:8px 13px;font-size:11px;font-weight:1000;
+  opacity:0;transition:.15s;white-space:nowrap
+}
+.battle-message.show{opacity:1}
+.damage-pop{
+  position:absolute;z-index:15;font-size:29px;font-weight:1000;color:#e54444;text-shadow:0 2px 0 #fff;
+  pointer-events:none;animation:damageFloat .75s ease-out forwards
+}
+.damage-pop.heal{color:#2a9d62}.damage-pop.special{font-size:39px;color:#8b42df}
+.boss-question{
+  background:rgba(255,255,255,.96);border:2px solid rgba(23,32,51,.13);border-radius:20px;padding:14px;
+  position:relative;min-height:250px
+}
+.boss-question.special-q{border-color:#8f55d9;box-shadow:0 0 0 3px rgba(143,85,217,.10)}
+.boss-q-head{display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:1000;color:#6d7482}
+.boss-q-title{text-align:center;font-size:25px;font-weight:1000;margin:9px 0 2px}
+.boss-q-kana{text-align:center;min-height:17px;font-size:11px;font-weight:900;color:#5875be}
+.timer-track{height:9px;background:#eee6d6;border-radius:99px;overflow:hidden;margin:9px 0 11px}
+.timer-fill{height:100%;width:100%;background:#f0b429;transform-origin:left;transition:width .06s linear}
+.boss-options{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.boss-option{
+  border:1.5px solid #dfe3ea;background:#fff;border-radius:12px;padding:10px 9px;text-align:left;
+  font-size:11px;font-weight:900;min-height:42px
+}
+.boss-option.correct{background:#e6f8ee;border-color:#43b777;color:#14784a}
+.boss-option.wrong{background:#fff0f0;border-color:#e66565;color:#b23535}
+.boss-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}
+.attack-btn,.special-btn{
+  border:0;border-radius:17px;padding:15px 11px;font-weight:1000;font-size:13px
+}
+.attack-btn{background:#17233d;color:#fff}.special-btn{background:#8f55d9;color:#fff}
+.special-btn small,.attack-btn small{display:block;font-size:9px;opacity:.75;margin-top:3px}
+.boss-rule{font-size:10px;color:#6d7482;line-height:1.5;text-align:center;margin-top:9px}
+.battle-overlay{
+  position:absolute;inset:0;background:rgba(17,25,45,.78);z-index:30;display:none;place-items:center;padding:24px;
+  backdrop-filter:blur(4px)
+}
+.battle-overlay.show{display:grid}.victory-box{
+  background:#fff;border-radius:25px;padding:22px;text-align:center;width:min(390px,100%);animation:victoryPop .5s cubic-bezier(.2,.8,.2,1)
+}
+.victory-title{font-size:31px;font-weight:1000;color:#c18a00}.defeat-title{font-size:27px;font-weight:1000;color:#c74848}
+.score-big{font-size:42px;font-weight:1000;margin:10px 0 0}.score-label{font-size:10px;letter-spacing:1.5px;color:#7b8290;font-weight:1000}
+.score-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:14px 0}
+.score-breakdown div{background:#f4f5f8;border-radius:12px;padding:9px}.score-breakdown b{display:block;font-size:15px}.score-breakdown span{font-size:8px;color:#777f8d;font-weight:900}
+.slash{
+  position:absolute;z-index:12;width:72px;height:13px;background:#fff;border:4px solid #172033;border-radius:50%;
+  opacity:0;pointer-events:none
+}
+.screen-shake{animation:screenShake .35s ease}
+.player-unit.attack{animation:playerAttack .38s ease}
+.enemy-unit.attack{animation:enemyAttack .42s ease}
+.enemy-unit.hit{animation:enemyHit .38s ease}
+.player-unit.hit{animation:playerHit .38s ease}
+.enemy-unit.defeated{animation:enemyDefeat 1s ease forwards}
+.slash.fly{animation:slashFly .38s ease forwards}
+@keyframes playerAttack{0%{transform:translateX(0)}45%{transform:translateX(48px) rotate(-4deg)}100%{transform:translateX(0)}}
+@keyframes enemyAttack{0%{transform:translateX(0) scale(1)}45%{transform:translateX(-55px) scale(1.12,.9)}100%{transform:translateX(0) scale(1)}}
+@keyframes enemyHit{0%,100%{transform:translateX(0)}25%{transform:translateX(10px) rotate(4deg)}55%{transform:translateX(-9px) rotate(-4deg)}}
+@keyframes playerHit{0%,100%{transform:translateX(0)}25%{transform:translateX(-9px) rotate(-4deg)}55%{transform:translateX(9px) rotate(4deg)}}
+@keyframes enemyDefeat{0%{opacity:1;transform:scale(1)}35%{transform:scale(1.25,.72) rotate(-6deg)}70%{transform:scale(.7,1.4) rotate(8deg)}100%{opacity:0;transform:scale(.05) rotate(80deg) translateY(-80px)}}
+@keyframes slashFly{0%{opacity:0;left:30%;bottom:92px;transform:rotate(-25deg) scale(.5)}15%{opacity:1}100%{opacity:0;left:68%;bottom:140px;transform:rotate(-25deg) scale(1.2)}}
+@keyframes damageFloat{0%{opacity:0;transform:translateY(10px) scale(.7)}20%{opacity:1;transform:translateY(0) scale(1.15)}100%{opacity:0;transform:translateY(-48px) scale(1)}}
+@keyframes screenShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+@keyframes victoryPop{0%{transform:scale(.7);opacity:0}70%{transform:scale(1.05);opacity:1}100%{transform:scale(1)}}
+
+
+/* V4: compact boss battle for smartphone portrait */
+#bossPage.active{height:calc(100dvh - 154px);min-height:0;overflow:hidden;display:flex;flex-direction:column}
+#bossPage .page-head{margin:0 0 7px;min-height:30px;flex:0 0 auto}
+#bossPage .page-head h2{font-size:18px}
+#bossBattle{min-height:0;flex:1}
+.boss-arena{
+  min-height:0;height:100%;padding:8px 9px;border-radius:18px;display:flex;flex-direction:column
+}
+.battle-top{gap:7px;flex:0 0 auto}
+.fighter-label{font-size:9px}.hp-track{height:9px;border-width:1.5px}.hp-text{font-size:9px;margin-top:1px}
+.battle-stage{height:156px;min-height:128px;flex:0 1 156px;padding:5px 18px 7px;align-items:flex-end}
+.player-unit{width:74px}.enemy-unit{width:98px}
+.player-avatar{width:54px;height:64px;border-width:4px;border-radius:28px 28px 18px 18px}
+.player-avatar:before,.player-avatar:after{width:7px;height:10px;top:20px}
+.player-avatar:before{left:13px}.player-avatar:after{right:13px}
+.player-sword{width:8px;height:43px;border-width:2px;right:-11px;top:6px}
+.player-sword:after{width:21px;height:6px;border-width:2px;left:-8px;bottom:-4px}
+.enemy-unit .slime{width:88px;height:66px;border-width:4px}
+.enemy-unit .slime:before,.enemy-unit .slime:after{top:23px;width:10px;height:14px}
+.enemy-unit .slime:before{left:23px}.enemy-unit .slime:after{right:23px}
+.enemy-unit .slime-mouth{top:42px;width:19px;height:6px;border-bottom-width:3px}
+.battle-shadow{width:62px;height:9px;margin-top:4px}
+.boss-question{min-height:0;flex:1;padding:8px 9px;border-radius:15px;overflow:hidden}
+.boss-q-head{font-size:9px}.boss-q-title{font-size:20px;margin:4px 0 0;line-height:1.15}
+.boss-q-kana{min-height:14px;font-size:9px;line-height:1.2}
+.prompt-label{font-size:9px}.timer-track{height:6px;margin:5px 0 6px}
+.boss-options{gap:5px}
+.boss-option{border-radius:9px;padding:6px 7px;font-size:10px;line-height:1.2;min-height:31px}
+.boss-actions{gap:7px;margin-top:7px}
+.attack-btn,.special-btn{border-radius:12px;padding:10px 7px;font-size:11px}
+.special-btn small,.attack-btn small{font-size:8px;margin-top:2px}
+.special-btn:disabled{background:#9a94a6;color:#e9e7ed;opacity:.72;cursor:default}
+.boss-rule{font-size:8.5px;line-height:1.3;margin-top:5px}
+.battle-message{top:4px;padding:6px 10px;font-size:9px}
+.damage-pop{font-size:23px}.damage-pop.special{font-size:31px}
+@media(max-height:700px){
+  #bossPage.active{height:calc(100dvh - 145px)}
+  .battle-stage{height:128px;min-height:108px;flex-basis:128px}
+  .player-avatar{width:48px;height:57px}.enemy-unit .slime{width:78px;height:58px}
+  .enemy-unit .slime:before,.enemy-unit .slime:after{top:20px}.enemy-unit .slime-mouth{top:37px}
+  .boss-option{padding:5px 6px;min-height:28px}.attack-btn,.special-btn{padding:8px 6px}
+}
+
+
+/* V5: warning removed, larger battle controls */
+#bossPage.active{height:calc(100dvh - 128px)}
+#bossPage .page-head{margin:2px 0 9px;min-height:34px}
+#bossPage .page-head h2{font-size:20px}
+.battle-stage{height:170px;min-height:140px;flex-basis:170px;padding:6px 20px 9px}
+.boss-question{padding:10px 11px;border-radius:17px}
+.boss-actions{gap:10px;margin-top:10px}
+.attack-btn,.special-btn{border-radius:15px;padding:15px 9px;font-size:13px;min-height:62px}
+.special-btn small,.attack-btn small{font-size:9px;margin-top:4px;line-height:1.25}
+.boss-rule{font-size:9.5px;line-height:1.35;margin-top:7px}
+.timer-fill.slow{background:#e86659}
+@media(max-height:700px){
+  #bossPage.active{height:calc(100dvh - 122px)}
+  .battle-stage{height:140px;min-height:116px;flex-basis:140px}
+  .attack-btn,.special-btn{padding:11px 7px;min-height:52px;font-size:12px}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="toprow">
+    <div class="brand">JUNIOR ENGLISH<small>中学生コア英単語 1,085・V5</small></div>
+    <div class="wallet">
+      <div class="pill coin">🪙 <span id="coinCount">0</span></div>
+      <div class="pill streak">🔥 <span id="streakCount">0</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+
+<section class="page active" id="homePage">
+  <div class="hero">
+    <div class="eyebrow">ENGLISH WORD TRAINING</div>
+    <h1>毎日少しずつ、<br>英単語を自分のものに。</h1>
+    <p>中学生向けの基礎〜高校受験レベルを、一覧・検索・テストで反復学習できます。</p>
+    <div class="stats">
+      <div class="stat"><b id="totalWords">1085</b><span>WORDS</span></div>
+      <div class="stat"><b id="learnedToday">0</b><span>TODAY</span></div>
+      <div class="stat"><b id="homeAccuracy">--</b><span>DAILY SCORE</span></div>
+    </div>
+  </div>
+
+  <div class="section-title"><h2>学習メニュー</h2><span>好きな方法で覚えよう</span></div>
+  <div class="grid">
+    <button class="action primary" onclick="goPage('words')"><div class="icon">🔤</div><b>A–Z 単語一覧</b><p>アルファベット順に全単語を確認</p></button>
+    <button class="action blue" onclick="goPage('words',true)"><div class="icon">🔎</div><b>単語検索</b><p>英語・日本語・カタカナで検索</p></button>
+    <button class="action green" onclick="goPage('quiz')"><div class="icon">✏️</div><b>10単語テスト</b><p>ランダム10問ですぐ復習</p></button>
+    <button class="action pink" onclick="goPage('daily')"><div class="icon">🎁</div><b>今日の50問</b><p>1日1回の報酬チャレンジ</p></button>
+    <button class="action boss" onclick="goPage('boss')"><div class="icon">👾</div><b>ボスクエスト</b><p>英単語でモンスターを倒そう</p></button>
+  </div>
+
+  <div class="daily-banner" onclick="goPage('daily')" role="button">
+    <div class="daily-row">
+      <div><div class="daily-badge">TODAY 50</div></div>
+      <div style="flex:1"><b style="font-size:14px">今日の50問チャレンジ</b><div class="reward" id="homeRewardText">最大 +150 COIN</div></div>
+      <div style="font-weight:1000">›</div>
+    </div>
+    <div class="progress-track"><div class="progress-bar" id="homeDailyBar"></div></div>
+  </div>
+
+  <div class="section-title"><h2>この単語集について</h2></div>
+  <div class="about">
+    <h3>1,085語を収録</h3>
+    中学校で頻出する基礎語〜高校受験の土台となる語を中心に1,085語を収録しています。各単語には日本語の意味とカタカナ読みを付けています。
+    <br><small>※ 学年区分とカタカナ読みは学習用の目安です。教科書・地域・発音によって差があります。</small>
+  </div>
+</section>
+
+<section class="page" id="wordsPage">
+  <div class="page-head"><h2>A–Z WORD LIST</h2><span id="listSummary" style="font-size:11px;color:#6d7482;font-weight:900"></span></div>
+  <div class="searchbox"><input id="searchInput" type="search" placeholder="英語・日本語・カタカナで検索" autocomplete="off"></div>
+  <div class="letters" id="letters"></div>
+  <div class="filters" id="wordGradeFilters">
+    <button class="grade-chip active" data-grade="0">すべて</button>
+    <button class="grade-chip" data-grade="1">中1目安</button>
+    <button class="grade-chip" data-grade="2">中2目安</button>
+    <button class="grade-chip" data-grade="3">中3目安</button>
+  </div>
+  <div class="word-count" id="wordCount"></div>
+  <div class="word-list" id="wordList"></div>
+</section>
+
+<section class="page" id="quizPage">
+  <div class="page-head"><h2>10単語テスト</h2><span style="font-size:11px;color:#6d7482">何度でも挑戦OK</span></div>
+  <div id="quizSetup" class="setup">
+    <h3>出題範囲</h3>
+    <p>出題方向を選べます。カタカナ読みは答え合わせのあとに表示します。</p>
+    <div style="font-size:11px;font-weight:1000;margin-top:6px">問題タイプ</div>
+    <div class="mode-row" id="quizModeFilters">
+      <button class="mode-chip active" data-mode="mix">ミックス</button>
+      <button class="mode-chip" data-mode="en2jp">英語 → 意味</button>
+      <button class="mode-chip" data-mode="jp2en">意味 → 英語</button>
+    </div>
+    <div style="font-size:11px;font-weight:1000;margin-bottom:8px">学年</div>
+    <div class="filters" id="quizGradeFilters">
+      <button class="grade-chip active" data-grade="0">全学年</button>
+      <button class="grade-chip" data-grade="1">中1</button>
+      <button class="grade-chip" data-grade="2">中2</button>
+      <button class="grade-chip" data-grade="3">中3</button>
+    </div>
+    <button class="startbtn" onclick="startQuiz(10)">10問スタート</button>
+  </div>
+  <div id="quizArea" style="display:none"></div>
+</section>
+
+<section class="page" id="dailyPage">
+  <div class="page-head"><h2>今日の50問</h2><span id="dailyDate" style="font-size:11px;color:#6d7482;font-weight:900"></span></div>
+  <div class="daily-info">
+    <div><b id="dailyDone">0/50</b><span>PROGRESS</span></div>
+    <div><b id="dailyScoreMini">0</b><span>CORRECT</span></div>
+    <div><b id="dailyRewardMini">0</b><span>REWARD</span></div>
+  </div>
+  <div id="dailySetup" class="setup">
+    <h3>🎁 1日1回の報酬</h3>
+    <p>毎日固定の50問に挑戦。途中で画面を閉じても続きから再開できます。報酬を受け取れるのはその日1回だけです。</p>
+    <div style="display:grid;gap:7px;font-size:12px;font-weight:900;margin:13px 0">
+      <div>✅ 正解40〜44問：+50 COIN</div>
+      <div>🏅 正解45〜49問：+100 COIN</div>
+      <div>🏆 50問全問正解：+150 COIN</div>
+    </div>
+    <button class="startbtn" id="dailyStartBtn" onclick="startDaily()">今日の50問を始める</button>
+  </div>
+  <div id="dailyArea" style="display:none"></div>
+</section>
+
+<section class="page" id="bossPage">
+  <div class="page-head"><h2>BOSS QUEST</h2><span style="font-size:11px;color:#6d7482;font-weight:900">STAGE 1</span></div>
+  <div id="bossSetup" class="boss-card">
+    <div style="font-size:10px;font-weight:1000;letter-spacing:1.5px;color:#d6c3ff">BEGINNER BOSS</div>
+    <h3>SLIME / スライム</h3>
+    <p>中1英単語を中心にしたスピードバトル。1問3秒以内に答えて攻撃しよう。</p>
+    <div class="boss-preview">
+      <div class="slime"><div class="slime-mouth"></div></div>
+      <div class="boss-mini-stats">
+        <div><b>20</b><span>BOSS HP</span></div>
+        <div><b>10</b><span>YOUR HP</span></div>
+        <div><b>3 sec</b><span>TIME</span></div>
+      </div>
+    </div>
+    <div style="font-size:11px;line-height:1.8;font-weight:850">
+      ⚔️ 通常攻撃：正解で 1 DAMAGE<br>
+      💥 必殺：1バトル1回 / 難問・6択 / 正解で 4 DAMAGE<br>
+      ❌ ミス / TIME UP：こちらが 1 DAMAGE
+    </div>
+    <button class="startbtn" onclick="startBossBattle()">スライムに挑戦</button>
+  </div>
+  <div id="bossBattle" style="display:none"></div>
+</section>
+
+</main>
+
+<nav class="nav">
+  <button class="active" data-page="home" onclick="goPage('home')"><span>🏠</span>HOME</button>
+  <button data-page="words" onclick="goPage('words')"><span>🔤</span>WORDS</button>
+  <button data-page="quiz" onclick="goPage('quiz')"><span>✏️</span>TEST</button>
+  <button data-page="daily" onclick="goPage('daily')"><span>🎁</span>TODAY 50</button>
+  <button data-page="boss" onclick="goPage('boss')"><span>👾</span>BOSS</button>
+</nav>
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+const WORDS = [{"word":"a","kana":"ア","meaning":"1つの、ある","grade":1},{"word":"ability","kana":"アビリティ","meaning":"能力","grade":3},{"word":"able","kana":"エイブル","meaning":"できる、有能な","grade":2},{"word":"about","kana":"アバウト","meaning":"～について、約","grade":1},{"word":"above","kana":"アバブ","meaning":"～の上に、上の","grade":1},{"word":"abroad","kana":"アブロード","meaning":"外国へ、外国で","grade":2},{"word":"accept","kana":"アクセプト","meaning":"受け入れる","grade":3},{"word":"accident","kana":"アクシデント","meaning":"事故","grade":3},{"word":"accidentally","kana":"アクシデンタリー","meaning":"偶然に","grade":3},{"word":"achieve","kana":"アチーブ","meaning":"達成する","grade":3},{"word":"across","kana":"アクロス","meaning":"～を横切って、向こう側に","grade":2},{"word":"action","kana":"アクション","meaning":"行動","grade":3},{"word":"active","kana":"アクティブ","meaning":"活動的な","grade":2},{"word":"activity","kana":"アクティビティ","meaning":"活動","grade":3},{"word":"actor","kana":"アクター","meaning":"俳優","grade":1},{"word":"actress","kana":"アクトレス","meaning":"女優","grade":1},{"word":"actually","kana":"アクチュアリー","meaning":"実際に","grade":3},{"word":"add","kana":"アッド","meaning":"加える","grade":3},{"word":"address","kana":"アドレス","meaning":"住所、演説する","grade":2},{"word":"adult","kana":"アダルト","meaning":"大人","grade":3},{"word":"advantage","kana":"アドバンテージ","meaning":"利点、有利な点","grade":3},{"word":"adventure","kana":"アドベンチャー","meaning":"冒険","grade":2},{"word":"advertisement","kana":"アドバタイズメント","meaning":"広告","grade":3},{"word":"advice","kana":"アドバイス","meaning":"助言","grade":2},{"word":"affect","kana":"アフェクト","meaning":"影響を与える","grade":3},{"word":"afford","kana":"アフォード","meaning":"～する余裕がある","grade":3},{"word":"afraid","kana":"アフレイド","meaning":"恐れて","grade":1},{"word":"after","kana":"アフター","meaning":"～の後に","grade":1},{"word":"afternoon","kana":"アフタヌーン","meaning":"午後","grade":1},{"word":"again","kana":"アゲイン","meaning":"もう一度","grade":1},{"word":"against","kana":"アゲインスト","meaning":"～に反対して、～に対して","grade":3},{"word":"age","kana":"エイジ","meaning":"年齢、時代","grade":3},{"word":"ago","kana":"アゴウ","meaning":"～前に","grade":2},{"word":"agree","kana":"アグリー","meaning":"賛成する、同意する","grade":3},{"word":"agreeable","kana":"アグリーアブル","meaning":"感じのよい、同意できる","grade":3},{"word":"agriculture","kana":"アグリカルチャー","meaning":"農業","grade":3},{"word":"ahead","kana":"アヘッド","meaning":"前方に、先に","grade":2},{"word":"air","kana":"エア","meaning":"空気","grade":2},{"word":"airport","kana":"エアポート","meaning":"空港","grade":2},{"word":"alive","kana":"アライブ","meaning":"生きている","grade":2},{"word":"all","kana":"オール","meaning":"すべての","grade":1},{"word":"allow","kana":"アラウ","meaning":"許す","grade":3},{"word":"almost","kana":"オールモウスト","meaning":"ほとんど","grade":2},{"word":"alone","kana":"アロウン","meaning":"ひとりで","grade":3},{"word":"along","kana":"アロング","meaning":"～に沿って、一緒に","grade":2},{"word":"aloud","kana":"アラウド","meaning":"声に出して","grade":2},{"word":"already","kana":"オールレディ","meaning":"すでに","grade":2},{"word":"also","kana":"オールソー","meaning":"～もまた","grade":1},{"word":"although","kana":"オールゾウ","meaning":"～だけれども","grade":3},{"word":"always","kana":"オールウェイズ","meaning":"いつも","grade":1},{"word":"am","kana":"アム","meaning":"～です、～である","grade":1},{"word":"amazing","kana":"アメイジング","meaning":"驚くべき、すばらしい","grade":2},{"word":"ambulance","kana":"アンビュランス","meaning":"救急車","grade":2},{"word":"among","kana":"アマング","meaning":"～の間で","grade":3},{"word":"amount","kana":"アマウント","meaning":"量、総額","grade":3},{"word":"an","kana":"アン","meaning":"1つの、ある","grade":1},{"word":"ancient","kana":"エインシェント","meaning":"古代の","grade":3},{"word":"and","kana":"アンド","meaning":"そして","grade":1},{"word":"angry","kana":"アングリー","meaning":"怒った","grade":1},{"word":"animal","kana":"アニマル","meaning":"動物","grade":1},{"word":"announce","kana":"アナウンス","meaning":"発表する","grade":3},{"word":"another","kana":"アナザー","meaning":"もう1つの、別の","grade":2},{"word":"answer","kana":"アンサー","meaning":"答え、答える","grade":1},{"word":"any","kana":"エニー","meaning":"いくつかの、どんな～も","grade":2},{"word":"anyone","kana":"エニワン","meaning":"だれか、だれでも","grade":2},{"word":"anything","kana":"エニシング","meaning":"何か、何でも","grade":2},{"word":"anywhere","kana":"エニウェア","meaning":"どこかに、どこでも","grade":3},{"word":"apartment","kana":"アパートメント","meaning":"アパート、集合住宅","grade":1},{"word":"apologize","kana":"アポロジャイズ","meaning":"謝る","grade":3},{"word":"apology","kana":"アポロジー","meaning":"謝罪","grade":3},{"word":"appear","kana":"アピア","meaning":"現れる、～のように見える","grade":3},{"word":"apple","kana":"アップル","meaning":"りんご","grade":1},{"word":"April","kana":"エイプリル","meaning":"4月","grade":1},{"word":"are","kana":"アー","meaning":"～です、～である","grade":1},{"word":"area","kana":"エリア","meaning":"地域、区域","grade":3},{"word":"argument","kana":"アーギュメント","meaning":"議論、口論","grade":3},{"word":"around","kana":"アラウンド","meaning":"～の周りに","grade":1},{"word":"arrange","kana":"アレンジ","meaning":"手配する、並べる","grade":3},{"word":"arrive","kana":"アライブ","meaning":"到着する","grade":2},{"word":"art","kana":"アート","meaning":"美術、芸術","grade":1},{"word":"article","kana":"アーティクル","meaning":"記事","grade":3},{"word":"artist","kana":"アーティスト","meaning":"芸術家","grade":1},{"word":"as","kana":"アズ","meaning":"～として、～のように","grade":3},{"word":"ask","kana":"アスク","meaning":"尋ねる、頼む","grade":2},{"word":"asleep","kana":"アスリープ","meaning":"眠って","grade":2},{"word":"astronaut","kana":"アストロノート","meaning":"宇宙飛行士","grade":2},{"word":"at","kana":"アット","meaning":"～で、～に","grade":1},{"word":"attack","kana":"アタック","meaning":"攻撃、攻撃する","grade":2},{"word":"attention","kana":"アテンション","meaning":"注意、注目","grade":3},{"word":"attitude","kana":"アティチュード","meaning":"態度","grade":3},{"word":"August","kana":"オーガスト","meaning":"8月","grade":1},{"word":"aunt","kana":"アント","meaning":"おば","grade":1},{"word":"Australia","kana":"オーストラリア","meaning":"オーストラリア","grade":1},{"word":"autumn","kana":"オータム","meaning":"秋","grade":1},{"word":"average","kana":"アベレージ","meaning":"平均、平均の","grade":3},{"word":"avoid","kana":"アボイド","meaning":"避ける","grade":3},{"word":"away","kana":"アウェイ","meaning":"離れて","grade":3},{"word":"baby","kana":"ベイビー","meaning":"赤ちゃん","grade":1},{"word":"back","kana":"バック","meaning":"後ろ、戻って","grade":2},{"word":"background","kana":"バックグラウンド","meaning":"背景","grade":2},{"word":"bad","kana":"バッド","meaning":"悪い","grade":1},{"word":"bag","kana":"バッグ","meaning":"かばん","grade":1},{"word":"balance","kana":"バランス","meaning":"つり合い、均衡","grade":3},{"word":"ball","kana":"ボール","meaning":"ボール","grade":1},{"word":"banana","kana":"バナナ","meaning":"バナナ","grade":1},{"word":"bank","kana":"バンク","meaning":"銀行、土手","grade":1},{"word":"baseball","kana":"ベイスボール","meaning":"野球","grade":1},{"word":"basic","kana":"ベイシック","meaning":"基本的な","grade":3},{"word":"basketball","kana":"バスケットボール","meaning":"バスケットボール","grade":1},{"word":"bath","kana":"バス","meaning":"入浴","grade":1},{"word":"bathroom","kana":"バスルーム","meaning":"浴室、トイレ","grade":1},{"word":"battery","kana":"バッテリー","meaning":"電池","grade":2},{"word":"battle","kana":"バトル","meaning":"戦い、戦う","grade":2},{"word":"be","kana":"ビー","meaning":"～である、いる","grade":1},{"word":"beach","kana":"ビーチ","meaning":"浜辺","grade":1},{"word":"bear","kana":"ベア","meaning":"クマ、耐える","grade":3},{"word":"beat","kana":"ビート","meaning":"打つ、打ち負かす","grade":3},{"word":"beautiful","kana":"ビューティフル","meaning":"美しい","grade":1},{"word":"beauty","kana":"ビューティ","meaning":"美しさ","grade":2},{"word":"because","kana":"ビコーズ","meaning":"なぜなら、～なので","grade":1},{"word":"become","kana":"ビカム","meaning":"～になる","grade":2},{"word":"bed","kana":"ベッド","meaning":"ベッド","grade":1},{"word":"before","kana":"ビフォー","meaning":"～の前に","grade":1},{"word":"begin","kana":"ビギン","meaning":"始める、始まる","grade":2},{"word":"behavior","kana":"ビヘイビア","meaning":"行動、ふるまい","grade":3},{"word":"behind","kana":"ビハインド","meaning":"～の後ろに","grade":1},{"word":"believe","kana":"ビリーブ","meaning":"信じる","grade":2},{"word":"bell","kana":"ベル","meaning":"ベル、鐘","grade":1},{"word":"belong","kana":"ビロング","meaning":"所属する","grade":2},{"word":"below","kana":"ビロウ","meaning":"～の下に、下の","grade":2},{"word":"bench","kana":"ベンチ","meaning":"ベンチ","grade":1},{"word":"benefit","kana":"ベネフィット","meaning":"利益、恩恵","grade":3},{"word":"best","kana":"ベスト","meaning":"最も良い、最善","grade":2},{"word":"better","kana":"ベター","meaning":"より良い","grade":2},{"word":"between","kana":"ビトウィーン","meaning":"～の間に","grade":2},{"word":"bicycle","kana":"バイシクル","meaning":"自転車","grade":1},{"word":"big","kana":"ビッグ","meaning":"大きい","grade":1},{"word":"bike","kana":"バイク","meaning":"自転車","grade":1},{"word":"bird","kana":"バード","meaning":"鳥","grade":1},{"word":"birthday","kana":"バースデイ","meaning":"誕生日","grade":1},{"word":"black","kana":"ブラック","meaning":"黒、黒い","grade":1},{"word":"blanket","kana":"ブランケット","meaning":"毛布","grade":2},{"word":"blood","kana":"ブラッド","meaning":"血","grade":2},{"word":"blue","kana":"ブルー","meaning":"青、青い","grade":1},{"word":"board","kana":"ボード","meaning":"板、乗り込む","grade":2},{"word":"boat","kana":"ボウト","meaning":"ボート、船","grade":2},{"word":"body","kana":"ボディ","meaning":"体","grade":2},{"word":"book","kana":"ブック","meaning":"本","grade":1},{"word":"bookstore","kana":"ブックストア","meaning":"書店","grade":1},{"word":"border","kana":"ボーダー","meaning":"境界、国境","grade":3},{"word":"borrow","kana":"ボロウ","meaning":"借りる","grade":3},{"word":"both","kana":"ボウス","meaning":"両方","grade":2},{"word":"bottle","kana":"ボトル","meaning":"びん","grade":1},{"word":"bottom","kana":"ボトム","meaning":"底、下部","grade":2},{"word":"bowl","kana":"ボウル","meaning":"鉢、どんぶり","grade":1},{"word":"box","kana":"ボックス","meaning":"箱","grade":1},{"word":"boy","kana":"ボーイ","meaning":"男の子","grade":1},{"word":"brain","kana":"ブレイン","meaning":"脳","grade":3},{"word":"branch","kana":"ブランチ","meaning":"枝、支店","grade":2},{"word":"brave","kana":"ブレイブ","meaning":"勇敢な","grade":2},{"word":"bread","kana":"ブレッド","meaning":"パン","grade":1},{"word":"break","kana":"ブレイク","meaning":"壊す、休憩","grade":3},{"word":"breakfast","kana":"ブレックファスト","meaning":"朝食","grade":1},{"word":"bridge","kana":"ブリッジ","meaning":"橋","grade":3},{"word":"bright","kana":"ブライト","meaning":"明るい、輝く","grade":2},{"word":"bring","kana":"ブリング","meaning":"持ってくる","grade":2},{"word":"brother","kana":"ブラザー","meaning":"兄、弟","grade":1},{"word":"brown","kana":"ブラウン","meaning":"茶色、茶色の","grade":1},{"word":"brush","kana":"ブラッシュ","meaning":"ブラシ、磨く","grade":1},{"word":"build","kana":"ビルド","meaning":"建てる","grade":2},{"word":"building","kana":"ビルディング","meaning":"建物","grade":2},{"word":"bus","kana":"バス","meaning":"バス","grade":1},{"word":"business","kana":"ビジネス","meaning":"仕事、商売","grade":2},{"word":"busy","kana":"ビジー","meaning":"忙しい","grade":1},{"word":"but","kana":"バット","meaning":"しかし","grade":1},{"word":"butterfly","kana":"バタフライ","meaning":"チョウ","grade":1},{"word":"buy","kana":"バイ","meaning":"買う","grade":1},{"word":"by","kana":"バイ","meaning":"～によって、～のそばに","grade":1},{"word":"cake","kana":"ケイク","meaning":"ケーキ","grade":1},{"word":"call","kana":"コール","meaning":"呼ぶ、電話する","grade":1},{"word":"camera","kana":"カメラ","meaning":"カメラ","grade":1},{"word":"camp","kana":"キャンプ","meaning":"キャンプ、野営する","grade":1},{"word":"can","kana":"キャン","meaning":"～できる","grade":1},{"word":"Canada","kana":"カナダ","meaning":"カナダ","grade":1},{"word":"capital","kana":"キャピタル","meaning":"首都、大文字","grade":2},{"word":"captain","kana":"キャプテン","meaning":"船長、主将","grade":2},{"word":"car","kana":"カー","meaning":"車","grade":1},{"word":"card","kana":"カード","meaning":"カード","grade":1},{"word":"care","kana":"ケア","meaning":"世話、気にする","grade":2},{"word":"career","kana":"キャリア","meaning":"職業、経歴","grade":3},{"word":"careful","kana":"ケアフル","meaning":"注意深い","grade":3},{"word":"careless","kana":"ケアレス","meaning":"不注意な","grade":2},{"word":"carry","kana":"キャリー","meaning":"運ぶ","grade":2},{"word":"cat","kana":"キャット","meaning":"猫","grade":1},{"word":"catch","kana":"キャッチ","meaning":"捕まえる","grade":2},{"word":"cause","kana":"コーズ","meaning":"原因、引き起こす","grade":3},{"word":"celebrate","kana":"セレブレイト","meaning":"祝う","grade":2},{"word":"center","kana":"センター","meaning":"中心、中央","grade":1},{"word":"central","kana":"セントラル","meaning":"中心の、中央の","grade":3},{"word":"century","kana":"センチュリー","meaning":"世紀","grade":3},{"word":"certain","kana":"サートン","meaning":"ある、確かな","grade":3},{"word":"certainly","kana":"サートンリー","meaning":"確かに、もちろん","grade":2},{"word":"chair","kana":"チェア","meaning":"いす","grade":1},{"word":"challenge","kana":"チャレンジ","meaning":"挑戦、挑戦する","grade":3},{"word":"chance","kana":"チャンス","meaning":"機会、可能性","grade":3},{"word":"change","kana":"チェインジ","meaning":"変える、変化","grade":2},{"word":"character","kana":"キャラクター","meaning":"人物、性格、文字","grade":2},{"word":"cheese","kana":"チーズ","meaning":"チーズ","grade":1},{"word":"chicken","kana":"チキン","meaning":"鶏、鶏肉","grade":1},{"word":"child","kana":"チャイルド","meaning":"子ども","grade":2},{"word":"children","kana":"チルドレン","meaning":"子どもたち","grade":2},{"word":"chocolate","kana":"チョコレート","meaning":"チョコレート","grade":1},{"word":"choice","kana":"チョイス","meaning":"選択、選択肢","grade":2},{"word":"choose","kana":"チューズ","meaning":"選ぶ","grade":2},{"word":"Christmas","kana":"クリスマス","meaning":"クリスマス","grade":1},{"word":"circle","kana":"サークル","meaning":"円、輪","grade":1},{"word":"citizen","kana":"シティズン","meaning":"市民、国民","grade":3},{"word":"city","kana":"シティ","meaning":"都市、市","grade":1},{"word":"class","kana":"クラス","meaning":"授業、学級","grade":1},{"word":"classmate","kana":"クラスメイト","meaning":"同級生","grade":1},{"word":"classroom","kana":"クラスルーム","meaning":"教室","grade":1},{"word":"clean","kana":"クリーン","meaning":"きれいな、掃除する","grade":1},{"word":"clear","kana":"クリア","meaning":"明らかな、晴れた","grade":3},{"word":"climate","kana":"クライメット","meaning":"気候","grade":3},{"word":"climb","kana":"クライム","meaning":"登る","grade":2},{"word":"clock","kana":"クロック","meaning":"時計","grade":1},{"word":"close","kana":"クロウズ","meaning":"閉じる、近い","grade":1},{"word":"clothes","kana":"クローズ","meaning":"衣服","grade":2},{"word":"cloud","kana":"クラウド","meaning":"雲","grade":2},{"word":"cloudy","kana":"クラウディ","meaning":"曇った","grade":1},{"word":"club","kana":"クラブ","meaning":"部活動、クラブ","grade":1},{"word":"coast","kana":"コースト","meaning":"海岸","grade":2},{"word":"coat","kana":"コート","meaning":"コート、上着","grade":1},{"word":"coffee","kana":"コーヒー","meaning":"コーヒー","grade":1},{"word":"coin","kana":"コイン","meaning":"硬貨","grade":1},{"word":"cold","kana":"コールド","meaning":"寒い、冷たい","grade":2},{"word":"collect","kana":"コレクト","meaning":"集める","grade":2},{"word":"college","kana":"カレッジ","meaning":"大学","grade":2},{"word":"color","kana":"カラー","meaning":"色","grade":1},{"word":"come","kana":"カム","meaning":"来る","grade":1},{"word":"common","kana":"コモン","meaning":"共通の、一般的な","grade":3},{"word":"communicate","kana":"コミュニケイト","meaning":"意思を伝える","grade":3},{"word":"communication","kana":"コミュニケイション","meaning":"意思疎通、通信","grade":3},{"word":"community","kana":"コミュニティ","meaning":"地域社会","grade":3},{"word":"company","kana":"カンパニー","meaning":"会社","grade":2},{"word":"compare","kana":"コンペア","meaning":"比較する","grade":3},{"word":"competition","kana":"コンペティション","meaning":"競争、大会","grade":3},{"word":"complain","kana":"コンプレイン","meaning":"不平を言う","grade":3},{"word":"complete","kana":"コンプリート","meaning":"完成させる、完全な","grade":3},{"word":"computer","kana":"コンピューター","meaning":"コンピューター","grade":1},{"word":"concert","kana":"コンサート","meaning":"コンサート","grade":1},{"word":"conclusion","kana":"コンクルージョン","meaning":"結論","grade":3},{"word":"condition","kana":"コンディション","meaning":"状態、条件","grade":3},{"word":"confidence","kana":"コンフィデンス","meaning":"自信","grade":3},{"word":"connect","kana":"コネクト","meaning":"つなぐ","grade":3},{"word":"connection","kana":"コネクション","meaning":"つながり、接続","grade":3},{"word":"consider","kana":"コンシダー","meaning":"よく考える","grade":3},{"word":"contact","kana":"コンタクト","meaning":"連絡、接触する","grade":3},{"word":"contest","kana":"コンテスト","meaning":"競技、コンテスト","grade":2},{"word":"continue","kana":"コンティニュー","meaning":"続ける、続く","grade":3},{"word":"control","kana":"コントロール","meaning":"制御、管理する","grade":3},{"word":"conversation","kana":"カンバセイション","meaning":"会話","grade":2},{"word":"cook","kana":"クック","meaning":"料理する、料理人","grade":1},{"word":"cool","kana":"クール","meaning":"涼しい、かっこいい","grade":1},{"word":"corner","kana":"コーナー","meaning":"角、隅","grade":1},{"word":"could","kana":"クッド","meaning":"～できた、～かもしれない","grade":2},{"word":"country","kana":"カントリー","meaning":"国、田舎","grade":1},{"word":"courage","kana":"カリッジ","meaning":"勇気","grade":3},{"word":"course","kana":"コース","meaning":"講座、進路、道筋","grade":2},{"word":"create","kana":"クリエイト","meaning":"作り出す","grade":3},{"word":"creature","kana":"クリーチャー","meaning":"生き物","grade":2},{"word":"cry","kana":"クライ","meaning":"泣く、叫ぶ","grade":1},{"word":"culture","kana":"カルチャー","meaning":"文化","grade":3},{"word":"cup","kana":"カップ","meaning":"カップ","grade":1},{"word":"custom","kana":"カスタム","meaning":"習慣、慣習","grade":3},{"word":"cut","kana":"カット","meaning":"切る","grade":1},{"word":"daily","kana":"デイリー","meaning":"毎日の","grade":2},{"word":"damage","kana":"ダメージ","meaning":"損害、傷つける","grade":2},{"word":"dance","kana":"ダンス","meaning":"踊る、ダンス","grade":1},{"word":"danger","kana":"デインジャー","meaning":"危険","grade":2},{"word":"dangerous","kana":"デインジャラス","meaning":"危険な","grade":2},{"word":"dark","kana":"ダーク","meaning":"暗い","grade":2},{"word":"date","kana":"デイト","meaning":"日付、日","grade":2},{"word":"daughter","kana":"ドーター","meaning":"娘","grade":1},{"word":"day","kana":"デイ","meaning":"日、1日","grade":1},{"word":"deal","kana":"ディール","meaning":"扱う、取引","grade":3},{"word":"dear","kana":"ディア","meaning":"親愛なる、高価な","grade":2},{"word":"death","kana":"デス","meaning":"死","grade":3},{"word":"debate","kana":"ディベイト","meaning":"討論、討論する","grade":3},{"word":"December","kana":"ディセンバー","meaning":"12月","grade":1},{"word":"decide","kana":"ディサイド","meaning":"決める","grade":3},{"word":"decision","kana":"ディシジョン","meaning":"決定","grade":3},{"word":"deep","kana":"ディープ","meaning":"深い","grade":3},{"word":"degree","kana":"ディグリー","meaning":"程度、度、学位","grade":3},{"word":"deliver","kana":"デリバー","meaning":"配達する、届ける","grade":2},{"word":"department","kana":"デパートメント","meaning":"部門、学科","grade":3},{"word":"depend","kana":"ディペンド","meaning":"頼る、～次第である","grade":3},{"word":"describe","kana":"ディスクライブ","meaning":"説明する、描写する","grade":2},{"word":"design","kana":"デザイン","meaning":"デザイン、設計する","grade":2},{"word":"desk","kana":"デスク","meaning":"机","grade":1},{"word":"destroy","kana":"デストロイ","meaning":"破壊する","grade":3},{"word":"detail","kana":"ディテイル","meaning":"詳細","grade":3},{"word":"develop","kana":"ディベロップ","meaning":"発達する、開発する","grade":3},{"word":"development","kana":"ディベロップメント","meaning":"発展、開発","grade":3},{"word":"diary","kana":"ダイアリー","meaning":"日記","grade":1},{"word":"dictionary","kana":"ディクショナリー","meaning":"辞書","grade":1},{"word":"die","kana":"ダイ","meaning":"死ぬ","grade":3},{"word":"difference","kana":"ディファレンス","meaning":"違い","grade":3},{"word":"different","kana":"ディファレント","meaning":"異なる","grade":2},{"word":"difficult","kana":"ディフィカルト","meaning":"難しい","grade":2},{"word":"dinner","kana":"ディナー","meaning":"夕食","grade":1},{"word":"direct","kana":"ダイレクト","meaning":"直接の、案内する","grade":3},{"word":"direction","kana":"ダイレクション","meaning":"方向、指示","grade":2},{"word":"directly","kana":"ダイレクトリー","meaning":"直接に","grade":3},{"word":"dirty","kana":"ダーティ","meaning":"汚れた","grade":1},{"word":"discover","kana":"ディスカバー","meaning":"発見する","grade":3},{"word":"discovery","kana":"ディスカバリー","meaning":"発見","grade":3},{"word":"discuss","kana":"ディスカス","meaning":"話し合う","grade":3},{"word":"disease","kana":"ディジーズ","meaning":"病気","grade":3},{"word":"dish","kana":"ディッシュ","meaning":"皿、料理","grade":1},{"word":"distance","kana":"ディスタンス","meaning":"距離","grade":3},{"word":"do","kana":"ドゥー","meaning":"する","grade":1},{"word":"doctor","kana":"ドクター","meaning":"医者","grade":1},{"word":"dog","kana":"ドッグ","meaning":"犬","grade":1},{"word":"door","kana":"ドア","meaning":"ドア","grade":1},{"word":"down","kana":"ダウン","meaning":"下へ、下に","grade":2},{"word":"draw","kana":"ドロー","meaning":"描く、引く","grade":2},{"word":"dream","kana":"ドリーム","meaning":"夢、夢を見る","grade":2},{"word":"drink","kana":"ドリンク","meaning":"飲む、飲み物","grade":1},{"word":"drive","kana":"ドライブ","meaning":"運転する","grade":1},{"word":"drop","kana":"ドロップ","meaning":"落とす、落ちる","grade":2},{"word":"drum","kana":"ドラム","meaning":"太鼓、ドラム","grade":1},{"word":"dry","kana":"ドライ","meaning":"乾いた、乾かす","grade":1},{"word":"during","kana":"デューリング","meaning":"～の間に","grade":2},{"word":"duty","kana":"デューティ","meaning":"義務、任務","grade":3},{"word":"each","kana":"イーチ","meaning":"それぞれの","grade":2},{"word":"early","kana":"アーリー","meaning":"早い、早く","grade":1},{"word":"earth","kana":"アース","meaning":"地球、大地","grade":2},{"word":"earthquake","kana":"アースクエイク","meaning":"地震","grade":2},{"word":"east","kana":"イースト","meaning":"東","grade":2},{"word":"easy","kana":"イージー","meaning":"簡単な","grade":1},{"word":"eat","kana":"イート","meaning":"食べる","grade":1},{"word":"economy","kana":"エコノミー","meaning":"経済","grade":3},{"word":"education","kana":"エデュケイション","meaning":"教育","grade":3},{"word":"educational","kana":"エデュケイショナル","meaning":"教育の","grade":3},{"word":"effect","kana":"エフェクト","meaning":"効果、影響","grade":3},{"word":"effort","kana":"エフォート","meaning":"努力","grade":3},{"word":"egg","kana":"エッグ","meaning":"卵","grade":1},{"word":"eight","kana":"エイト","meaning":"8","grade":1},{"word":"eighteen","kana":"エイティーン","meaning":"18","grade":1},{"word":"either","kana":"イーザー","meaning":"どちらか一方の","grade":2},{"word":"electric","kana":"エレクトリック","meaning":"電気の","grade":2},{"word":"electricity","kana":"エレクトリシティ","meaning":"電気","grade":3},{"word":"elevator","kana":"エレベーター","meaning":"エレベーター","grade":1},{"word":"eleven","kana":"イレブン","meaning":"11","grade":1},{"word":"else","kana":"エルス","meaning":"ほかに","grade":3},{"word":"emergency","kana":"イマージェンシー","meaning":"緊急事態","grade":3},{"word":"emotion","kana":"イモウション","meaning":"感情","grade":3},{"word":"encourage","kana":"エンカレッジ","meaning":"励ます","grade":3},{"word":"end","kana":"エンド","meaning":"終わり、終える","grade":3},{"word":"enemy","kana":"エネミー","meaning":"敵","grade":2},{"word":"energy","kana":"エナジー","meaning":"エネルギー","grade":3},{"word":"engine","kana":"エンジン","meaning":"エンジン","grade":2},{"word":"engineer","kana":"エンジニア","meaning":"技術者","grade":2},{"word":"English","kana":"イングリッシュ","meaning":"英語、英国の","grade":1},{"word":"enjoy","kana":"エンジョイ","meaning":"楽しむ","grade":1},{"word":"enough","kana":"イナフ","meaning":"十分な、十分に","grade":2},{"word":"enter","kana":"エンター","meaning":"入る、入力する","grade":2},{"word":"entrance","kana":"エントランス","meaning":"入口","grade":2},{"word":"environment","kana":"エンバイロンメント","meaning":"環境","grade":3},{"word":"equality","kana":"イクオリティ","meaning":"平等","grade":3},{"word":"especially","kana":"エスペシャリー","meaning":"特に","grade":3},{"word":"evening","kana":"イーブニング","meaning":"夕方、晩","grade":1},{"word":"event","kana":"イベント","meaning":"出来事、行事","grade":3},{"word":"ever","kana":"エバー","meaning":"これまでに、いつか","grade":3},{"word":"every","kana":"エブリ","meaning":"毎～、すべての","grade":1},{"word":"everyone","kana":"エブリワン","meaning":"みんな","grade":2},{"word":"everything","kana":"エブリシング","meaning":"すべてのもの","grade":2},{"word":"example","kana":"イグザンプル","meaning":"例","grade":2},{"word":"excellent","kana":"エクセレント","meaning":"優秀な、すばらしい","grade":2},{"word":"exchange","kana":"エクスチェインジ","meaning":"交換する、交換","grade":3},{"word":"excited","kana":"エキサイテッド","meaning":"わくわくした","grade":2},{"word":"exciting","kana":"エキサイティング","meaning":"わくわくさせる","grade":2},{"word":"excuse","kana":"エクスキューズ","meaning":"許す、言い訳","grade":2},{"word":"exercise","kana":"エクササイズ","meaning":"運動、練習","grade":1},{"word":"exist","kana":"イグジスト","meaning":"存在する","grade":3},{"word":"exit","kana":"エグジット","meaning":"出口、退出する","grade":2},{"word":"expect","kana":"エクスペクト","meaning":"予期する、期待する","grade":3},{"word":"experience","kana":"エクスペリエンス","meaning":"経験、経験する","grade":3},{"word":"experiment","kana":"イクスペリメント","meaning":"実験、実験する","grade":3},{"word":"explain","kana":"エクスプレイン","meaning":"説明する","grade":3},{"word":"express","kana":"エクスプレス","meaning":"表現する","grade":3},{"word":"face","kana":"フェイス","meaning":"顔、直面する","grade":2},{"word":"fact","kana":"ファクト","meaning":"事実","grade":2},{"word":"factory","kana":"ファクトリー","meaning":"工場","grade":2},{"word":"fall","kana":"フォール","meaning":"落ちる、秋","grade":2},{"word":"familiar","kana":"ファミリア","meaning":"よく知られた、親しい","grade":3},{"word":"family","kana":"ファミリー","meaning":"家族","grade":1},{"word":"famous","kana":"フェイマス","meaning":"有名な","grade":1},{"word":"far","kana":"ファー","meaning":"遠く、遠い","grade":2},{"word":"farm","kana":"ファーム","meaning":"農場","grade":1},{"word":"farmer","kana":"ファーマー","meaning":"農家、農民","grade":1},{"word":"fast","kana":"ファスト","meaning":"速い、速く","grade":2},{"word":"father","kana":"ファーザー","meaning":"父","grade":1},{"word":"favorite","kana":"フェイバリット","meaning":"お気に入りの","grade":1},{"word":"fear","kana":"フィア","meaning":"恐れ、恐れる","grade":2},{"word":"February","kana":"フェブラリー","meaning":"2月","grade":1},{"word":"feel","kana":"フィール","meaning":"感じる","grade":2},{"word":"feeling","kana":"フィーリング","meaning":"感情、感じ","grade":2},{"word":"festival","kana":"フェスティバル","meaning":"祭り","grade":2},{"word":"few","kana":"フュー","meaning":"少数の","grade":2},{"word":"field","kana":"フィールド","meaning":"野原、競技場","grade":1},{"word":"fifteen","kana":"フィフティーン","meaning":"15","grade":1},{"word":"fifty","kana":"フィフティ","meaning":"50","grade":1},{"word":"fight","kana":"ファイト","meaning":"戦う、戦い","grade":2},{"word":"fill","kana":"フィル","meaning":"満たす","grade":2},{"word":"finally","kana":"ファイナリー","meaning":"ついに、最後に","grade":3},{"word":"find","kana":"ファインド","meaning":"見つける","grade":1},{"word":"fine","kana":"ファイン","meaning":"元気な、すばらしい","grade":1},{"word":"finger","kana":"フィンガー","meaning":"指","grade":1},{"word":"finish","kana":"フィニッシュ","meaning":"終える、終わる","grade":2},{"word":"fire","kana":"ファイア","meaning":"火、火事","grade":2},{"word":"first","kana":"ファースト","meaning":"最初の、第1の","grade":1},{"word":"fish","kana":"フィッシュ","meaning":"魚","grade":1},{"word":"five","kana":"ファイブ","meaning":"5","grade":1},{"word":"fix","kana":"フィックス","meaning":"修理する、固定する","grade":2},{"word":"flood","kana":"フラッド","meaning":"洪水","grade":3},{"word":"floor","kana":"フロア","meaning":"床、階","grade":1},{"word":"flower","kana":"フラワー","meaning":"花","grade":1},{"word":"fly","kana":"フライ","meaning":"飛ぶ","grade":2},{"word":"fog","kana":"フォグ","meaning":"霧","grade":2},{"word":"follow","kana":"フォロー","meaning":"ついて行く、従う","grade":3},{"word":"food","kana":"フード","meaning":"食べ物","grade":1},{"word":"football","kana":"フットボール","meaning":"フットボール、サッカー","grade":1},{"word":"for","kana":"フォー","meaning":"～のために、～に向かって","grade":1},{"word":"force","kana":"フォース","meaning":"力、強制する","grade":3},{"word":"foreign","kana":"フォーリン","meaning":"外国の","grade":3},{"word":"forest","kana":"フォレスト","meaning":"森","grade":3},{"word":"forget","kana":"フォゲット","meaning":"忘れる","grade":3},{"word":"form","kana":"フォーム","meaning":"形、用紙、形成する","grade":3},{"word":"four","kana":"フォー","meaning":"4","grade":1},{"word":"fourteen","kana":"フォーティーン","meaning":"14","grade":1},{"word":"free","kana":"フリー","meaning":"自由な、無料の","grade":2},{"word":"freedom","kana":"フリーダム","meaning":"自由","grade":3},{"word":"fresh","kana":"フレッシュ","meaning":"新鮮な","grade":2},{"word":"Friday","kana":"フライデイ","meaning":"金曜日","grade":1},{"word":"friend","kana":"フレンド","meaning":"友達","grade":1},{"word":"friendship","kana":"フレンドシップ","meaning":"友情","grade":3},{"word":"from","kana":"フロム","meaning":"～から","grade":1},{"word":"front","kana":"フロント","meaning":"前、正面","grade":1},{"word":"fruit","kana":"フルーツ","meaning":"果物","grade":1},{"word":"full","kana":"フル","meaning":"いっぱいの、満ちた","grade":3},{"word":"fun","kana":"ファン","meaning":"楽しみ、楽しいこと","grade":1},{"word":"future","kana":"フューチャー","meaning":"未来","grade":2},{"word":"game","kana":"ゲーム","meaning":"試合、ゲーム","grade":1},{"word":"garden","kana":"ガーデン","meaning":"庭","grade":2},{"word":"gate","kana":"ゲイト","meaning":"門","grade":1},{"word":"general","kana":"ジェネラル","meaning":"一般的な","grade":3},{"word":"generation","kana":"ジェネレイション","meaning":"世代","grade":3},{"word":"gentle","kana":"ジェントル","meaning":"優しい、穏やかな","grade":2},{"word":"get","kana":"ゲット","meaning":"得る、着く","grade":1},{"word":"gift","kana":"ギフト","meaning":"贈り物","grade":2},{"word":"girl","kana":"ガール","meaning":"女の子","grade":1},{"word":"give","kana":"ギブ","meaning":"与える","grade":1},{"word":"glad","kana":"グラッド","meaning":"うれしい","grade":2},{"word":"glass","kana":"グラス","meaning":"ガラス、コップ","grade":1},{"word":"global","kana":"グローバル","meaning":"世界的な","grade":3},{"word":"glove","kana":"グラブ","meaning":"手袋","grade":1},{"word":"go","kana":"ゴウ","meaning":"行く","grade":1},{"word":"goal","kana":"ゴウル","meaning":"目標","grade":3},{"word":"goalkeeper","kana":"ゴールキーパー","meaning":"ゴールキーパー","grade":2},{"word":"good","kana":"グッド","meaning":"良い","grade":1},{"word":"goodbye","kana":"グッバイ","meaning":"さようなら","grade":1},{"word":"government","kana":"ガバメント","meaning":"政府","grade":3},{"word":"grade","kana":"グレイド","meaning":"学年、成績","grade":2},{"word":"great","kana":"グレイト","meaning":"すばらしい、偉大な","grade":2},{"word":"green","kana":"グリーン","meaning":"緑、緑の","grade":1},{"word":"ground","kana":"グラウンド","meaning":"地面、運動場","grade":3},{"word":"grow","kana":"グロウ","meaning":"育つ、育てる","grade":2},{"word":"growth","kana":"グロウス","meaning":"成長、増加","grade":3},{"word":"guess","kana":"ゲス","meaning":"推測する、推測","grade":2},{"word":"guest","kana":"ゲスト","meaning":"客、招待客","grade":1},{"word":"guide","kana":"ガイド","meaning":"案内する、案内人","grade":2},{"word":"guitar","kana":"ギター","meaning":"ギター","grade":1},{"word":"gym","kana":"ジム","meaning":"体育館、ジム","grade":1},{"word":"habit","kana":"ハビット","meaning":"習慣","grade":2},{"word":"hair","kana":"ヘア","meaning":"髪","grade":1},{"word":"half","kana":"ハーフ","meaning":"半分","grade":1},{"word":"hand","kana":"ハンド","meaning":"手","grade":1},{"word":"happen","kana":"ハプン","meaning":"起こる","grade":2},{"word":"happiness","kana":"ハピネス","meaning":"幸福","grade":3},{"word":"happy","kana":"ハッピー","meaning":"幸せな、うれしい","grade":1},{"word":"hard","kana":"ハード","meaning":"難しい、一生懸命に","grade":2},{"word":"hat","kana":"ハット","meaning":"帽子","grade":1},{"word":"hate","kana":"ヘイト","meaning":"憎む、ひどく嫌う","grade":2},{"word":"have","kana":"ハブ","meaning":"持っている、食べる","grade":1},{"word":"he","kana":"ヒー","meaning":"彼は、彼が","grade":1},{"word":"head","kana":"ヘッド","meaning":"頭","grade":1},{"word":"health","kana":"ヘルス","meaning":"健康","grade":3},{"word":"healthy","kana":"ヘルシー","meaning":"健康な","grade":3},{"word":"hear","kana":"ヒア","meaning":"聞こえる、聞く","grade":2},{"word":"heart","kana":"ハート","meaning":"心、心臓","grade":3},{"word":"heavy","kana":"ヘビー","meaning":"重い","grade":3},{"word":"height","kana":"ハイト","meaning":"高さ、身長","grade":2},{"word":"hello","kana":"ハロー","meaning":"こんにちは","grade":1},{"word":"help","kana":"ヘルプ","meaning":"助ける、手伝う","grade":1},{"word":"her","kana":"ハー","meaning":"彼女の、彼女を","grade":1},{"word":"here","kana":"ヒア","meaning":"ここに、ここで","grade":1},{"word":"hide","kana":"ハイド","meaning":"隠す、隠れる","grade":2},{"word":"hill","kana":"ヒル","meaning":"丘","grade":1},{"word":"his","kana":"ヒズ","meaning":"彼の","grade":1},{"word":"history","kana":"ヒストリー","meaning":"歴史","grade":2},{"word":"hit","kana":"ヒット","meaning":"打つ、当たる","grade":2},{"word":"hobby","kana":"ホビー","meaning":"趣味","grade":1},{"word":"hold","kana":"ホウルド","meaning":"持つ、開催する","grade":2},{"word":"holiday","kana":"ホリデイ","meaning":"休日","grade":1},{"word":"home","kana":"ホーム","meaning":"家、家庭","grade":1},{"word":"homework","kana":"ホームワーク","meaning":"宿題","grade":1},{"word":"hope","kana":"ホウプ","meaning":"望む、希望","grade":2},{"word":"horse","kana":"ホース","meaning":"馬","grade":1},{"word":"hospital","kana":"ホスピタル","meaning":"病院","grade":1},{"word":"hot","kana":"ホット","meaning":"暑い、熱い","grade":1},{"word":"hotel","kana":"ホテル","meaning":"ホテル","grade":1},{"word":"hour","kana":"アワー","meaning":"1時間","grade":1},{"word":"how","kana":"ハウ","meaning":"どのように、どれくらい","grade":1},{"word":"human","kana":"ヒューマン","meaning":"人間、人間の","grade":3},{"word":"hundred","kana":"ハンドレッド","meaning":"100","grade":1},{"word":"hungry","kana":"ハングリー","meaning":"空腹の","grade":1},{"word":"hurry","kana":"ハリー","meaning":"急ぐ","grade":2},{"word":"I","kana":"アイ","meaning":"私は、私が","grade":1},{"word":"ice","kana":"アイス","meaning":"氷","grade":1},{"word":"idea","kana":"アイディア","meaning":"考え、アイデア","grade":2},{"word":"ill","kana":"イル","meaning":"病気の","grade":2},{"word":"image","kana":"イメージ","meaning":"画像、印象","grade":3},{"word":"imagine","kana":"イマジン","meaning":"想像する","grade":3},{"word":"importance","kana":"インポータンス","meaning":"重要性","grade":3},{"word":"important","kana":"インポータント","meaning":"重要な","grade":2},{"word":"improve","kana":"インプルーブ","meaning":"改善する","grade":3},{"word":"in","kana":"イン","meaning":"～の中に、～で","grade":1},{"word":"include","kana":"インクルード","meaning":"含む","grade":3},{"word":"increase","kana":"インクリース","meaning":"増える、増やす","grade":3},{"word":"independent","kana":"インディペンデント","meaning":"独立した","grade":3},{"word":"individual","kana":"インディビジュアル","meaning":"個人、個人の","grade":3},{"word":"industry","kana":"インダストリー","meaning":"産業","grade":3},{"word":"influence","kana":"インフルエンス","meaning":"影響、影響を与える","grade":3},{"word":"information","kana":"インフォメイション","meaning":"情報","grade":3},{"word":"inside","kana":"インサイド","meaning":"内側に、内部","grade":2},{"word":"instead","kana":"インステッド","meaning":"その代わりに","grade":3},{"word":"instruction","kana":"インストラクション","meaning":"指示、説明","grade":3},{"word":"interested","kana":"インタレスティッド","meaning":"興味を持った","grade":2},{"word":"interesting","kana":"インタレスティング","meaning":"おもしろい、興味深い","grade":1},{"word":"international","kana":"インターナショナル","meaning":"国際的な","grade":3},{"word":"Internet","kana":"インターネット","meaning":"インターネット","grade":1},{"word":"interview","kana":"インタビュー","meaning":"面接、インタビューする","grade":2},{"word":"introduce","kana":"イントロデュース","meaning":"紹介する","grade":3},{"word":"invite","kana":"インバイト","meaning":"招待する","grade":2},{"word":"is","kana":"イズ","meaning":"～です、～である","grade":1},{"word":"island","kana":"アイランド","meaning":"島","grade":2},{"word":"issue","kana":"イシュー","meaning":"問題、論点","grade":3},{"word":"it","kana":"イット","meaning":"それは、それを","grade":1},{"word":"jacket","kana":"ジャケット","meaning":"上着、ジャケット","grade":1},{"word":"January","kana":"ジャニュアリー","meaning":"1月","grade":1},{"word":"Japan","kana":"ジャパン","meaning":"日本","grade":1},{"word":"Japanese","kana":"ジャパニーズ","meaning":"日本語、日本の","grade":1},{"word":"job","kana":"ジョブ","meaning":"仕事、職","grade":2},{"word":"join","kana":"ジョイン","meaning":"参加する","grade":2},{"word":"journey","kana":"ジャーニー","meaning":"旅","grade":2},{"word":"juice","kana":"ジュース","meaning":"ジュース","grade":1},{"word":"July","kana":"ジュライ","meaning":"7月","grade":1},{"word":"June","kana":"ジューン","meaning":"6月","grade":1},{"word":"junior","kana":"ジュニア","meaning":"年下の、下級の","grade":1},{"word":"keep","kana":"キープ","meaning":"保つ、持ち続ける","grade":2},{"word":"key","kana":"キー","meaning":"鍵、重要な","grade":1},{"word":"kind","kana":"カインド","meaning":"親切な、種類","grade":1},{"word":"kitchen","kana":"キッチン","meaning":"台所","grade":1},{"word":"know","kana":"ノウ","meaning":"知っている","grade":1},{"word":"knowledge","kana":"ナレッジ","meaning":"知識","grade":3},{"word":"lake","kana":"レイク","meaning":"湖","grade":1},{"word":"lamp","kana":"ランプ","meaning":"ランプ","grade":1},{"word":"language","kana":"ランゲージ","meaning":"言語","grade":2},{"word":"large","kana":"ラージ","meaning":"大きい、広い","grade":1},{"word":"last","kana":"ラスト","meaning":"最後の、この前の","grade":2},{"word":"late","kana":"レイト","meaning":"遅い、遅れて","grade":1},{"word":"later","kana":"レイター","meaning":"後で","grade":2},{"word":"laugh","kana":"ラフ","meaning":"笑う","grade":1},{"word":"law","kana":"ロー","meaning":"法律","grade":3},{"word":"lead","kana":"リード","meaning":"導く、先頭に立つ","grade":3},{"word":"leader","kana":"リーダー","meaning":"指導者、リーダー","grade":2},{"word":"learn","kana":"ラーン","meaning":"学ぶ","grade":1},{"word":"leave","kana":"リーブ","meaning":"去る、残す","grade":2},{"word":"left","kana":"レフト","meaning":"左、左の","grade":2},{"word":"leg","kana":"レッグ","meaning":"脚","grade":1},{"word":"lemon","kana":"レモン","meaning":"レモン","grade":1},{"word":"lend","kana":"レンド","meaning":"貸す","grade":2},{"word":"lesson","kana":"レッスン","meaning":"授業、課","grade":2},{"word":"letter","kana":"レター","meaning":"手紙、文字","grade":2},{"word":"level","kana":"レベル","meaning":"水準、段階","grade":2},{"word":"library","kana":"ライブラリー","meaning":"図書館","grade":1},{"word":"life","kana":"ライフ","meaning":"生活、生命","grade":2},{"word":"light","kana":"ライト","meaning":"光、明るい、軽い","grade":2},{"word":"like","kana":"ライク","meaning":"好きである、～のような","grade":1},{"word":"line","kana":"ライン","meaning":"線、列","grade":1},{"word":"lion","kana":"ライオン","meaning":"ライオン","grade":1},{"word":"listen","kana":"リスン","meaning":"聞く","grade":1},{"word":"little","kana":"リトル","meaning":"小さい、少しの","grade":1},{"word":"live","kana":"リブ","meaning":"住む、生きる","grade":1},{"word":"local","kana":"ローカル","meaning":"地域の、地元の","grade":3},{"word":"long","kana":"ロング","meaning":"長い","grade":1},{"word":"look","kana":"ルック","meaning":"見る、～に見える","grade":1},{"word":"lose","kana":"ルーズ","meaning":"失う、負ける","grade":2},{"word":"lot","kana":"ロット","meaning":"たくさん","grade":2},{"word":"love","kana":"ラブ","meaning":"愛する、大好きである","grade":1},{"word":"low","kana":"ロウ","meaning":"低い","grade":2},{"word":"lucky","kana":"ラッキー","meaning":"運の良い","grade":2},{"word":"lunch","kana":"ランチ","meaning":"昼食","grade":1},{"word":"machine","kana":"マシーン","meaning":"機械","grade":3},{"word":"magazine","kana":"マガジン","meaning":"雑誌","grade":1},{"word":"make","kana":"メイク","meaning":"作る","grade":1},{"word":"manager","kana":"マネージャー","meaning":"管理者、店長","grade":2},{"word":"many","kana":"メニー","meaning":"多くの","grade":1},{"word":"map","kana":"マップ","meaning":"地図","grade":1},{"word":"March","kana":"マーチ","meaning":"3月","grade":1},{"word":"market","kana":"マーケット","meaning":"市場","grade":1},{"word":"material","kana":"マテリアル","meaning":"材料、資料","grade":3},{"word":"math","kana":"マス","meaning":"数学","grade":1},{"word":"matter","kana":"マター","meaning":"事柄、重要である","grade":3},{"word":"May","kana":"メイ","meaning":"5月、～してもよい","grade":1},{"word":"me","kana":"ミー","meaning":"私を、私に","grade":1},{"word":"meal","kana":"ミール","meaning":"食事","grade":1},{"word":"mean","kana":"ミーン","meaning":"意味する","grade":3},{"word":"meaning","kana":"ミーニング","meaning":"意味","grade":2},{"word":"medicine","kana":"メディスン","meaning":"薬、医学","grade":2},{"word":"meet","kana":"ミート","meaning":"会う","grade":2},{"word":"member","kana":"メンバー","meaning":"一員、会員","grade":3},{"word":"memory","kana":"メモリー","meaning":"記憶","grade":2},{"word":"menu","kana":"メニュー","meaning":"メニュー","grade":1},{"word":"message","kana":"メッセージ","meaning":"伝言、メッセージ","grade":3},{"word":"meter","kana":"メーター","meaning":"メートル","grade":1},{"word":"method","kana":"メソッド","meaning":"方法","grade":3},{"word":"middle","kana":"ミドル","meaning":"中央、中間の","grade":1},{"word":"milk","kana":"ミルク","meaning":"牛乳","grade":1},{"word":"mind","kana":"マインド","meaning":"心、気にする","grade":3},{"word":"minute","kana":"ミニット","meaning":"分","grade":2},{"word":"mirror","kana":"ミラー","meaning":"鏡","grade":1},{"word":"model","kana":"モデル","meaning":"模型、模範","grade":2},{"word":"Monday","kana":"マンデイ","meaning":"月曜日","grade":1},{"word":"money","kana":"マネー","meaning":"お金","grade":1},{"word":"month","kana":"マンス","meaning":"月、1か月","grade":1},{"word":"moon","kana":"ムーン","meaning":"月","grade":1},{"word":"morning","kana":"モーニング","meaning":"朝、午前","grade":1},{"word":"mother","kana":"マザー","meaning":"母","grade":1},{"word":"mountain","kana":"マウンテン","meaning":"山","grade":3},{"word":"mouse","kana":"マウス","meaning":"ネズミ","grade":1},{"word":"mouth","kana":"マウス","meaning":"口","grade":1},{"word":"move","kana":"ムーブ","meaning":"動く、引っ越す","grade":2},{"word":"movement","kana":"ムーブメント","meaning":"動き、運動","grade":3},{"word":"movie","kana":"ムービー","meaning":"映画","grade":2},{"word":"Mr.","kana":"ミスター","meaning":"～さん、～氏","grade":1},{"word":"Ms.","kana":"ミズ","meaning":"～さん","grade":1},{"word":"much","kana":"マッチ","meaning":"多くの、たいへん","grade":1},{"word":"museum","kana":"ミュージアム","meaning":"博物館、美術館","grade":2},{"word":"music","kana":"ミュージック","meaning":"音楽","grade":1},{"word":"must","kana":"マスト","meaning":"～しなければならない","grade":2},{"word":"my","kana":"マイ","meaning":"私の","grade":1},{"word":"name","kana":"ネイム","meaning":"名前","grade":1},{"word":"nation","kana":"ネイション","meaning":"国家、国民","grade":3},{"word":"national","kana":"ナショナル","meaning":"国の、全国的な","grade":3},{"word":"natural","kana":"ナチュラル","meaning":"自然の","grade":3},{"word":"nature","kana":"ネイチャー","meaning":"自然","grade":2},{"word":"near","kana":"ニア","meaning":"～の近くに、近い","grade":2},{"word":"necessary","kana":"ネセサリー","meaning":"必要な","grade":3},{"word":"need","kana":"ニード","meaning":"必要とする","grade":2},{"word":"neighbor","kana":"ネイバー","meaning":"近所の人","grade":2},{"word":"never","kana":"ネバー","meaning":"決して～ない","grade":2},{"word":"new","kana":"ニュー","meaning":"新しい","grade":1},{"word":"news","kana":"ニューズ","meaning":"ニュース","grade":2},{"word":"newspaper","kana":"ニュースペイパー","meaning":"新聞","grade":1},{"word":"next","kana":"ネクスト","meaning":"次の","grade":1},{"word":"nice","kana":"ナイス","meaning":"すてきな、親切な","grade":1},{"word":"night","kana":"ナイト","meaning":"夜","grade":2},{"word":"nine","kana":"ナイン","meaning":"9","grade":1},{"word":"nineteen","kana":"ナインティーン","meaning":"19","grade":1},{"word":"no","kana":"ノウ","meaning":"いいえ、1つも～ない","grade":1},{"word":"noise","kana":"ノイズ","meaning":"音、騒音","grade":2},{"word":"normal","kana":"ノーマル","meaning":"普通の、正常な","grade":2},{"word":"north","kana":"ノース","meaning":"北","grade":2},{"word":"nose","kana":"ノウズ","meaning":"鼻","grade":1},{"word":"not","kana":"ノット","meaning":"～でない","grade":1},{"word":"notebook","kana":"ノートブック","meaning":"ノート","grade":1},{"word":"nothing","kana":"ナッシング","meaning":"何も～ない","grade":2},{"word":"notice","kana":"ノウティス","meaning":"気づく、通知","grade":3},{"word":"November","kana":"ノベンバー","meaning":"11月","grade":1},{"word":"now","kana":"ナウ","meaning":"今","grade":1},{"word":"number","kana":"ナンバー","meaning":"数、番号","grade":1},{"word":"nurse","kana":"ナース","meaning":"看護師","grade":1},{"word":"ocean","kana":"オウシャン","meaning":"海、大洋","grade":3},{"word":"October","kana":"オクトーバー","meaning":"10月","grade":1},{"word":"of","kana":"オブ","meaning":"～の","grade":1},{"word":"off","kana":"オフ","meaning":"離れて、～から外れて","grade":2},{"word":"offer","kana":"オファー","meaning":"申し出る、申し出","grade":3},{"word":"office","kana":"オフィス","meaning":"事務所","grade":1},{"word":"often","kana":"オーフン","meaning":"しばしば","grade":2},{"word":"old","kana":"オールド","meaning":"古い、年をとった","grade":1},{"word":"on","kana":"オン","meaning":"～の上に、～に","grade":1},{"word":"once","kana":"ワンス","meaning":"一度、かつて","grade":2},{"word":"one","kana":"ワン","meaning":"1、1つ","grade":1},{"word":"only","kana":"オンリー","meaning":"ただ～だけ、唯一の","grade":2},{"word":"open","kana":"オウプン","meaning":"開ける、開いている","grade":1},{"word":"opinion","kana":"オピニオン","meaning":"意見","grade":3},{"word":"opportunity","kana":"オポチュニティ","meaning":"機会","grade":3},{"word":"orange","kana":"オレンジ","meaning":"オレンジ、だいだい色","grade":1},{"word":"order","kana":"オーダー","meaning":"注文、命令、順序","grade":2},{"word":"ordinary","kana":"オーディナリー","meaning":"普通の","grade":3},{"word":"organization","kana":"オーガナイゼイション","meaning":"組織、団体","grade":3},{"word":"other","kana":"アザー","meaning":"ほかの","grade":2},{"word":"our","kana":"アワー","meaning":"私たちの","grade":1},{"word":"outside","kana":"アウトサイド","meaning":"外側に、外部","grade":2},{"word":"own","kana":"オウン","meaning":"自分自身の、所有する","grade":3},{"word":"pair","kana":"ペア","meaning":"1組、対","grade":1},{"word":"pants","kana":"パンツ","meaning":"ズボン","grade":1},{"word":"paper","kana":"ペイパー","meaning":"紙、新聞","grade":1},{"word":"parent","kana":"ペアレント","meaning":"親","grade":2},{"word":"park","kana":"パーク","meaning":"公園","grade":1},{"word":"party","kana":"パーティー","meaning":"パーティー、集まり","grade":2},{"word":"pass","kana":"パス","meaning":"通る、合格する、渡す","grade":2},{"word":"passport","kana":"パスポート","meaning":"パスポート","grade":2},{"word":"past","kana":"パスト","meaning":"過去、～を過ぎて","grade":2},{"word":"patient","kana":"ペイシェント","meaning":"患者、我慢強い","grade":3},{"word":"pay","kana":"ペイ","meaning":"支払う","grade":2},{"word":"peace","kana":"ピース","meaning":"平和","grade":3},{"word":"peaceful","kana":"ピースフル","meaning":"平和な","grade":3},{"word":"pen","kana":"ペン","meaning":"ペン","grade":1},{"word":"pencil","kana":"ペンシル","meaning":"鉛筆","grade":1},{"word":"people","kana":"ピープル","meaning":"人々","grade":1},{"word":"percent","kana":"パーセント","meaning":"パーセント","grade":2},{"word":"performance","kana":"パフォーマンス","meaning":"演技、成績","grade":3},{"word":"perhaps","kana":"パーハップス","meaning":"たぶん","grade":3},{"word":"period","kana":"ピリオド","meaning":"期間、時限、句点","grade":3},{"word":"person","kana":"パーソン","meaning":"人","grade":3},{"word":"personal","kana":"パーソナル","meaning":"個人の","grade":3},{"word":"pet","kana":"ペット","meaning":"ペット","grade":1},{"word":"phone","kana":"フォーン","meaning":"電話","grade":1},{"word":"physical","kana":"フィジカル","meaning":"身体の、物理的な","grade":3},{"word":"piano","kana":"ピアノ","meaning":"ピアノ","grade":1},{"word":"picture","kana":"ピクチャー","meaning":"絵、写真","grade":1},{"word":"place","kana":"プレイス","meaning":"場所、置く","grade":2},{"word":"plan","kana":"プラン","meaning":"計画、計画する","grade":2},{"word":"plane","kana":"プレイン","meaning":"飛行機","grade":1},{"word":"planet","kana":"プラネット","meaning":"惑星","grade":2},{"word":"plate","kana":"プレイト","meaning":"皿","grade":1},{"word":"play","kana":"プレイ","meaning":"遊ぶ、演奏する","grade":1},{"word":"please","kana":"プリーズ","meaning":"どうぞ、お願いします","grade":1},{"word":"point","kana":"ポイント","meaning":"点、要点","grade":3},{"word":"police","kana":"ポリース","meaning":"警察","grade":1},{"word":"policeman","kana":"ポリースマン","meaning":"警察官","grade":1},{"word":"pollute","kana":"ポルート","meaning":"汚染する","grade":3},{"word":"pollution","kana":"ポリューション","meaning":"汚染","grade":3},{"word":"pool","kana":"プール","meaning":"プール","grade":1},{"word":"poor","kana":"プア","meaning":"貧しい、乏しい","grade":3},{"word":"popular","kana":"ポピュラー","meaning":"人気のある","grade":2},{"word":"population","kana":"ポピュレイション","meaning":"人口","grade":3},{"word":"position","kana":"ポジション","meaning":"位置、立場","grade":3},{"word":"possible","kana":"ポッシブル","meaning":"可能な","grade":3},{"word":"post","kana":"ポウスト","meaning":"郵便、投稿する","grade":2},{"word":"postcard","kana":"ポウストカード","meaning":"はがき","grade":1},{"word":"power","kana":"パワー","meaning":"力、権力","grade":3},{"word":"practice","kana":"プラクティス","meaning":"練習、練習する","grade":1},{"word":"prepare","kana":"プリペア","meaning":"準備する","grade":3},{"word":"present","kana":"プレゼント","meaning":"現在、贈り物、発表する","grade":3},{"word":"presenter","kana":"プレゼンター","meaning":"発表者、司会者","grade":3},{"word":"pressure","kana":"プレッシャー","meaning":"圧力、重圧","grade":3},{"word":"price","kana":"プライス","meaning":"価格","grade":1},{"word":"private","kana":"プライベート","meaning":"私的な","grade":3},{"word":"prize","kana":"プライズ","meaning":"賞、賞品","grade":2},{"word":"probably","kana":"プロバブリー","meaning":"たぶん","grade":3},{"word":"problem","kana":"プロブレム","meaning":"問題","grade":2},{"word":"produce","kana":"プロデュース","meaning":"生産する","grade":3},{"word":"professional","kana":"プロフェッショナル","meaning":"専門職の、プロの","grade":3},{"word":"progress","kana":"プログレス","meaning":"進歩","grade":3},{"word":"project","kana":"プロジェクト","meaning":"計画、課題","grade":2},{"word":"promise","kana":"プロミス","meaning":"約束、約束する","grade":3},{"word":"protect","kana":"プロテクト","meaning":"守る","grade":3},{"word":"protective","kana":"プロテクティブ","meaning":"保護するための","grade":3},{"word":"provide","kana":"プロバイド","meaning":"提供する","grade":3},{"word":"public","kana":"パブリック","meaning":"公共の、公衆","grade":3},{"word":"purpose","kana":"パーパス","meaning":"目的","grade":3},{"word":"put","kana":"プット","meaning":"置く","grade":2},{"word":"quality","kana":"クオリティ","meaning":"質、品質","grade":3},{"word":"question","kana":"クエスチョン","meaning":"質問","grade":1},{"word":"quick","kana":"クイック","meaning":"速い、素早い","grade":2},{"word":"quiet","kana":"クワイエット","meaning":"静かな","grade":2},{"word":"rabbit","kana":"ラビット","meaning":"ウサギ","grade":1},{"word":"radio","kana":"レイディオ","meaning":"ラジオ","grade":1},{"word":"railway","kana":"レイルウェイ","meaning":"鉄道","grade":2},{"word":"rain","kana":"レイン","meaning":"雨、雨が降る","grade":2},{"word":"rainy","kana":"レイニー","meaning":"雨の","grade":1},{"word":"reach","kana":"リーチ","meaning":"着く、届く","grade":2},{"word":"read","kana":"リード","meaning":"読む","grade":1},{"word":"ready","kana":"レディ","meaning":"準備ができた","grade":1},{"word":"real","kana":"リアル","meaning":"本当の、現実の","grade":3},{"word":"reason","kana":"リーズン","meaning":"理由","grade":3},{"word":"receive","kana":"リシーブ","meaning":"受け取る","grade":3},{"word":"recent","kana":"リーセント","meaning":"最近の","grade":3},{"word":"record","kana":"レコード","meaning":"記録、記録する","grade":2},{"word":"recycle","kana":"リサイクル","meaning":"再利用する","grade":3},{"word":"red","kana":"レッド","meaning":"赤、赤い","grade":1},{"word":"reduce","kana":"リデュース","meaning":"減らす","grade":3},{"word":"region","kana":"リージョン","meaning":"地域","grade":3},{"word":"relationship","kana":"リレイションシップ","meaning":"関係","grade":3},{"word":"remember","kana":"リメンバー","meaning":"覚えている、思い出す","grade":2},{"word":"rent","kana":"レント","meaning":"借りる、家賃","grade":3},{"word":"report","kana":"リポート","meaning":"報告、報告する","grade":3},{"word":"research","kana":"リサーチ","meaning":"研究、調査","grade":3},{"word":"resource","kana":"リソース","meaning":"資源、資料","grade":3},{"word":"respect","kana":"リスペクト","meaning":"尊敬、尊重する","grade":3},{"word":"responsibility","kana":"リスポンシビリティ","meaning":"責任","grade":3},{"word":"responsible","kana":"リスポンシブル","meaning":"責任がある","grade":3},{"word":"restaurant","kana":"レストラン","meaning":"レストラン","grade":1},{"word":"result","kana":"リザルト","meaning":"結果","grade":3},{"word":"return","kana":"リターン","meaning":"戻る、返す","grade":2},{"word":"rice","kana":"ライス","meaning":"米、ご飯","grade":1},{"word":"ride","kana":"ライド","meaning":"乗る","grade":1},{"word":"right","kana":"ライト","meaning":"右、正しい","grade":2},{"word":"risk","kana":"リスク","meaning":"危険、危険を冒す","grade":3},{"word":"river","kana":"リバー","meaning":"川","grade":2},{"word":"road","kana":"ロウド","meaning":"道路","grade":2},{"word":"robot","kana":"ロボット","meaning":"ロボット","grade":1},{"word":"role","kana":"ロウル","meaning":"役割","grade":3},{"word":"roof","kana":"ルーフ","meaning":"屋根","grade":2},{"word":"room","kana":"ルーム","meaning":"部屋","grade":1},{"word":"rule","kana":"ルール","meaning":"規則","grade":3},{"word":"run","kana":"ラン","meaning":"走る","grade":1},{"word":"safe","kana":"セイフ","meaning":"安全な","grade":3},{"word":"salt","kana":"ソルト","meaning":"塩","grade":1},{"word":"same","kana":"セイム","meaning":"同じ","grade":2},{"word":"sand","kana":"サンド","meaning":"砂","grade":1},{"word":"Saturday","kana":"サタデイ","meaning":"土曜日","grade":1},{"word":"save","kana":"セイブ","meaning":"救う、節約する、保存する","grade":3},{"word":"say","kana":"セイ","meaning":"言う","grade":2},{"word":"schedule","kana":"スケジュール","meaning":"予定、日程","grade":2},{"word":"school","kana":"スクール","meaning":"学校","grade":1},{"word":"science","kana":"サイエンス","meaning":"科学、理科","grade":1},{"word":"scientist","kana":"サイエンティスト","meaning":"科学者","grade":2},{"word":"sea","kana":"シー","meaning":"海","grade":1},{"word":"season","kana":"シーズン","meaning":"季節","grade":2},{"word":"second","kana":"セカンド","meaning":"第2の、秒","grade":2},{"word":"see","kana":"シー","meaning":"見る、会う","grade":1},{"word":"seem","kana":"シーム","meaning":"～のように見える","grade":3},{"word":"send","kana":"センド","meaning":"送る","grade":2},{"word":"September","kana":"セプテンバー","meaning":"9月","grade":1},{"word":"serious","kana":"シリアス","meaning":"深刻な、まじめな","grade":3},{"word":"service","kana":"サービス","meaning":"サービス、公共事業","grade":3},{"word":"seven","kana":"セブン","meaning":"7","grade":1},{"word":"seventeen","kana":"セブンティーン","meaning":"17","grade":1},{"word":"she","kana":"シー","meaning":"彼女は、彼女が","grade":1},{"word":"shirt","kana":"シャート","meaning":"シャツ","grade":1},{"word":"shoe","kana":"シュー","meaning":"靴","grade":1},{"word":"shop","kana":"ショップ","meaning":"店、買い物をする","grade":2},{"word":"shopping","kana":"ショッピング","meaning":"買い物","grade":1},{"word":"short","kana":"ショート","meaning":"短い、背が低い","grade":1},{"word":"should","kana":"シュッド","meaning":"～すべきだ","grade":3},{"word":"shoulder","kana":"ショルダー","meaning":"肩","grade":1},{"word":"show","kana":"ショウ","meaning":"見せる、番組","grade":2},{"word":"similar","kana":"シミラー","meaning":"似ている","grade":3},{"word":"simple","kana":"シンプル","meaning":"簡単な、単純な","grade":3},{"word":"since","kana":"シンス","meaning":"～以来、～なので","grade":3},{"word":"sing","kana":"シング","meaning":"歌う","grade":2},{"word":"sister","kana":"シスター","meaning":"姉、妹","grade":1},{"word":"situation","kana":"シチュエイション","meaning":"状況","grade":3},{"word":"six","kana":"シックス","meaning":"6","grade":1},{"word":"sixteen","kana":"シックスティーン","meaning":"16","grade":1},{"word":"skill","kana":"スキル","meaning":"技能、技術","grade":2},{"word":"sky","kana":"スカイ","meaning":"空","grade":1},{"word":"sleep","kana":"スリープ","meaning":"眠る","grade":2},{"word":"slow","kana":"スロウ","meaning":"遅い、ゆっくりした","grade":2},{"word":"small","kana":"スモール","meaning":"小さい","grade":1},{"word":"smile","kana":"スマイル","meaning":"ほほえむ、笑顔","grade":1},{"word":"snake","kana":"スネイク","meaning":"ヘビ","grade":1},{"word":"snow","kana":"スノウ","meaning":"雪、雪が降る","grade":2},{"word":"soccer","kana":"サッカー","meaning":"サッカー","grade":1},{"word":"social","kana":"ソーシャル","meaning":"社会の","grade":3},{"word":"society","kana":"ソサイエティ","meaning":"社会","grade":3},{"word":"solution","kana":"ソリューション","meaning":"解決策","grade":3},{"word":"solve","kana":"ソルブ","meaning":"解決する","grade":3},{"word":"some","kana":"サム","meaning":"いくつかの、いくらかの","grade":1},{"word":"something","kana":"サムシング","meaning":"何か","grade":2},{"word":"sometimes","kana":"サムタイムズ","meaning":"時々","grade":2},{"word":"son","kana":"サン","meaning":"息子","grade":1},{"word":"song","kana":"ソング","meaning":"歌","grade":1},{"word":"soon","kana":"スーン","meaning":"すぐに","grade":2},{"word":"sound","kana":"サウンド","meaning":"音、～に聞こえる","grade":1},{"word":"source","kana":"ソース","meaning":"源、出典","grade":3},{"word":"south","kana":"サウス","meaning":"南","grade":2},{"word":"space","kana":"スペイス","meaning":"空間、宇宙","grade":3},{"word":"speak","kana":"スピーク","meaning":"話す","grade":1},{"word":"special","kana":"スペシャル","meaning":"特別な","grade":3},{"word":"speech","kana":"スピーチ","meaning":"演説、話し方","grade":2},{"word":"speed","kana":"スピード","meaning":"速さ","grade":2},{"word":"spend","kana":"スペンド","meaning":"費やす、過ごす","grade":3},{"word":"sport","kana":"スポート","meaning":"スポーツ","grade":1},{"word":"spring","kana":"スプリング","meaning":"春、ばね","grade":1},{"word":"stand","kana":"スタンド","meaning":"立つ","grade":1},{"word":"star","kana":"スター","meaning":"星","grade":1},{"word":"start","kana":"スタート","meaning":"始める、始まる","grade":2},{"word":"state","kana":"ステイト","meaning":"状態、州、述べる","grade":3},{"word":"station","kana":"ステイション","meaning":"駅","grade":2},{"word":"stay","kana":"ステイ","meaning":"滞在する、とどまる","grade":2},{"word":"step","kana":"ステップ","meaning":"一歩、段階","grade":2},{"word":"still","kana":"スティル","meaning":"まだ、今でも","grade":2},{"word":"stop","kana":"ストップ","meaning":"止める、止まる","grade":2},{"word":"store","kana":"ストア","meaning":"店、蓄える","grade":1},{"word":"story","kana":"ストーリー","meaning":"物語","grade":2},{"word":"street","kana":"ストリート","meaning":"通り","grade":2},{"word":"strength","kana":"ストレングス","meaning":"強さ、長所","grade":3},{"word":"strong","kana":"ストロング","meaning":"強い","grade":2},{"word":"student","kana":"スチューデント","meaning":"生徒、学生","grade":1},{"word":"study","kana":"スタディ","meaning":"勉強する、研究する","grade":1},{"word":"subject","kana":"サブジェクト","meaning":"教科、主題","grade":3},{"word":"success","kana":"サクセス","meaning":"成功","grade":3},{"word":"successful","kana":"サクセスフル","meaning":"成功した","grade":3},{"word":"such","kana":"サッチ","meaning":"そのような","grade":3},{"word":"sugar","kana":"シュガー","meaning":"砂糖","grade":1},{"word":"summer","kana":"サマー","meaning":"夏","grade":2},{"word":"sun","kana":"サン","meaning":"太陽","grade":1},{"word":"Sunday","kana":"サンデイ","meaning":"日曜日","grade":1},{"word":"sunny","kana":"サニー","meaning":"晴れた","grade":1},{"word":"supermarket","kana":"スーパーマーケット","meaning":"スーパーマーケット","grade":1},{"word":"support","kana":"サポート","meaning":"支える、支援","grade":3},{"word":"sure","kana":"シュア","meaning":"確かな、きっと","grade":2},{"word":"surprise","kana":"サプライズ","meaning":"驚き、驚かせる","grade":3},{"word":"sweater","kana":"セーター","meaning":"セーター","grade":1},{"word":"swim","kana":"スイム","meaning":"泳ぐ","grade":1},{"word":"system","kana":"システム","meaning":"仕組み、制度","grade":3},{"word":"table","kana":"テーブル","meaning":"テーブル","grade":1},{"word":"take","kana":"テイク","meaning":"取る、連れていく","grade":1},{"word":"talk","kana":"トーク","meaning":"話す","grade":1},{"word":"task","kana":"タスク","meaning":"課題、仕事","grade":2},{"word":"taxi","kana":"タクシー","meaning":"タクシー","grade":1},{"word":"teach","kana":"ティーチ","meaning":"教える","grade":2},{"word":"teacher","kana":"ティーチャー","meaning":"先生","grade":1},{"word":"team","kana":"チーム","meaning":"チーム","grade":3},{"word":"technology","kana":"テクノロジー","meaning":"技術","grade":3},{"word":"teeth","kana":"ティース","meaning":"歯（複数）","grade":1},{"word":"television","kana":"テレビジョン","meaning":"テレビ","grade":1},{"word":"tell","kana":"テル","meaning":"話す、教える","grade":2},{"word":"temperature","kana":"テンパラチャー","meaning":"温度","grade":3},{"word":"temple","kana":"テンプル","meaning":"寺院","grade":2},{"word":"ten","kana":"テン","meaning":"10","grade":1},{"word":"tennis","kana":"テニス","meaning":"テニス","grade":1},{"word":"than","kana":"ザン","meaning":"～より","grade":2},{"word":"thank","kana":"サンク","meaning":"感謝する","grade":1},{"word":"that","kana":"ザット","meaning":"あれ、それ、～ということ","grade":1},{"word":"the","kana":"ザ","meaning":"その","grade":1},{"word":"theater","kana":"シアター","meaning":"劇場","grade":3},{"word":"their","kana":"ゼア","meaning":"彼らの、彼女らの","grade":1},{"word":"them","kana":"ゼム","meaning":"彼らを、彼女らを","grade":1},{"word":"then","kana":"ゼン","meaning":"そのとき、それから","grade":2},{"word":"there","kana":"ゼア","meaning":"そこに、そこで","grade":1},{"word":"these","kana":"ジーズ","meaning":"これら","grade":1},{"word":"they","kana":"ゼイ","meaning":"彼らは、彼女らは","grade":1},{"word":"thing","kana":"シング","meaning":"物、こと","grade":1},{"word":"think","kana":"シンク","meaning":"思う、考える","grade":2},{"word":"thirteen","kana":"サーティーン","meaning":"13","grade":1},{"word":"thirty","kana":"サーティ","meaning":"30","grade":1},{"word":"this","kana":"ディス","meaning":"これ、この","grade":1},{"word":"those","kana":"ゾウズ","meaning":"あれら、それら","grade":1},{"word":"though","kana":"ゾウ","meaning":"～だけれども","grade":3},{"word":"three","kana":"スリー","meaning":"3","grade":1},{"word":"through","kana":"スルー","meaning":"～を通って","grade":2},{"word":"Thursday","kana":"サーズデイ","meaning":"木曜日","grade":1},{"word":"ticket","kana":"チケット","meaning":"切符、券","grade":1},{"word":"time","kana":"タイム","meaning":"時間、時刻","grade":1},{"word":"tired","kana":"タイアード","meaning":"疲れた","grade":2},{"word":"to","kana":"トゥー","meaning":"～へ、～すること","grade":1},{"word":"today","kana":"トゥデイ","meaning":"今日","grade":1},{"word":"together","kana":"トゥゲザー","meaning":"一緒に","grade":1},{"word":"tomato","kana":"トメイトウ","meaning":"トマト","grade":1},{"word":"tomorrow","kana":"トゥモロー","meaning":"明日","grade":1},{"word":"too","kana":"トゥー","meaning":"～も、～すぎる","grade":1},{"word":"tool","kana":"トゥール","meaning":"道具","grade":2},{"word":"toward","kana":"トワード","meaning":"～の方へ","grade":3},{"word":"towel","kana":"タオル","meaning":"タオル","grade":1},{"word":"tower","kana":"タワー","meaning":"塔","grade":2},{"word":"town","kana":"タウン","meaning":"町","grade":1},{"word":"toy","kana":"トイ","meaning":"おもちゃ","grade":1},{"word":"tradition","kana":"トラディション","meaning":"伝統","grade":3},{"word":"traditional","kana":"トラディショナル","meaning":"伝統的な","grade":3},{"word":"traffic","kana":"トラフィック","meaning":"交通","grade":3},{"word":"train","kana":"トレイン","meaning":"電車、列車","grade":1},{"word":"transportation","kana":"トランスポーテイション","meaning":"交通、輸送","grade":3},{"word":"travel","kana":"トラベル","meaning":"旅行する、旅行","grade":2},{"word":"tree","kana":"トゥリー","meaning":"木","grade":1},{"word":"trip","kana":"トリップ","meaning":"旅行","grade":2},{"word":"true","kana":"トゥルー","meaning":"本当の","grade":3},{"word":"try","kana":"トライ","meaning":"試す、努力する","grade":2},{"word":"Tuesday","kana":"チューズデイ","meaning":"火曜日","grade":1},{"word":"turn","kana":"ターン","meaning":"曲がる、回す、順番","grade":2},{"word":"twelve","kana":"トゥエルブ","meaning":"12","grade":1},{"word":"twenty","kana":"トゥエンティ","meaning":"20","grade":1},{"word":"two","kana":"トゥー","meaning":"2","grade":1},{"word":"umbrella","kana":"アンブレラ","meaning":"傘","grade":1},{"word":"uncle","kana":"アンクル","meaning":"おじ","grade":1},{"word":"under","kana":"アンダー","meaning":"～の下に","grade":1},{"word":"understand","kana":"アンダースタンド","meaning":"理解する","grade":2},{"word":"university","kana":"ユニバーシティ","meaning":"大学","grade":2},{"word":"up","kana":"アップ","meaning":"上へ、上に","grade":1},{"word":"use","kana":"ユーズ","meaning":"使う","grade":1},{"word":"useful","kana":"ユースフル","meaning":"役に立つ","grade":3},{"word":"usually","kana":"ユージュアリー","meaning":"たいてい","grade":2},{"word":"vacation","kana":"バケイション","meaning":"休暇","grade":2},{"word":"valuable","kana":"バリュアブル","meaning":"価値のある","grade":3},{"word":"value","kana":"バリュー","meaning":"価値","grade":3},{"word":"various","kana":"ベアリアス","meaning":"さまざまな","grade":3},{"word":"vegetable","kana":"ベジタブル","meaning":"野菜","grade":1},{"word":"very","kana":"ベリー","meaning":"とても","grade":1},{"word":"view","kana":"ビュー","meaning":"眺め、見方","grade":3},{"word":"village","kana":"ビレッジ","meaning":"村","grade":3},{"word":"visit","kana":"ビジット","meaning":"訪れる、訪問","grade":2},{"word":"visitor","kana":"ビジター","meaning":"訪問者","grade":2},{"word":"voice","kana":"ボイス","meaning":"声","grade":3},{"word":"volunteer","kana":"ボランティア","meaning":"ボランティア、進んで行う","grade":3},{"word":"wait","kana":"ウェイト","meaning":"待つ","grade":2},{"word":"walk","kana":"ウォーク","meaning":"歩く","grade":1},{"word":"wall","kana":"ウォール","meaning":"壁","grade":1},{"word":"wallet","kana":"ウォレット","meaning":"財布","grade":1},{"word":"want","kana":"ウォント","meaning":"欲しい、～したい","grade":1},{"word":"war","kana":"ウォー","meaning":"戦争","grade":3},{"word":"wash","kana":"ウォッシュ","meaning":"洗う","grade":1},{"word":"waste","kana":"ウェイスト","meaning":"無駄、廃棄物、浪費する","grade":3},{"word":"watch","kana":"ウォッチ","meaning":"見る、腕時計","grade":1},{"word":"water","kana":"ウォーター","meaning":"水","grade":1},{"word":"way","kana":"ウェイ","meaning":"方法、道","grade":3},{"word":"we","kana":"ウィー","meaning":"私たちは、私たちが","grade":1},{"word":"weak","kana":"ウィーク","meaning":"弱い","grade":2},{"word":"wear","kana":"ウェア","meaning":"身につける","grade":1},{"word":"weather","kana":"ウェザー","meaning":"天気","grade":2},{"word":"website","kana":"ウェブサイト","meaning":"ウェブサイト","grade":2},{"word":"Wednesday","kana":"ウェンズデイ","meaning":"水曜日","grade":1},{"word":"week","kana":"ウィーク","meaning":"週","grade":1},{"word":"weekend","kana":"ウィークエンド","meaning":"週末","grade":1},{"word":"welcome","kana":"ウェルカム","meaning":"ようこそ、歓迎する","grade":1},{"word":"well","kana":"ウェル","meaning":"上手に、健康で","grade":1},{"word":"west","kana":"ウェスト","meaning":"西","grade":2},{"word":"what","kana":"ワット","meaning":"何、どんな","grade":1},{"word":"when","kana":"ウェン","meaning":"いつ、～するとき","grade":1},{"word":"where","kana":"ウェア","meaning":"どこ、～する場所","grade":1},{"word":"whether","kana":"ウェザー","meaning":"～かどうか","grade":3},{"word":"which","kana":"ウィッチ","meaning":"どちら、どの","grade":2},{"word":"while","kana":"ワイル","meaning":"～する間、一方で","grade":3},{"word":"white","kana":"ホワイト","meaning":"白、白い","grade":1},{"word":"who","kana":"フー","meaning":"だれ","grade":1},{"word":"whole","kana":"ホウル","meaning":"全体の","grade":3},{"word":"why","kana":"ワイ","meaning":"なぜ","grade":1},{"word":"wide","kana":"ワイド","meaning":"幅の広い","grade":3},{"word":"wild","kana":"ワイルド","meaning":"野生の","grade":2},{"word":"win","kana":"ウィン","meaning":"勝つ","grade":3},{"word":"wind","kana":"ウィンド","meaning":"風","grade":1},{"word":"window","kana":"ウィンドウ","meaning":"窓","grade":1},{"word":"windy","kana":"ウィンディ","meaning":"風の強い","grade":1},{"word":"winter","kana":"ウィンター","meaning":"冬","grade":2},{"word":"wish","kana":"ウィッシュ","meaning":"願う、願い","grade":2},{"word":"with","kana":"ウィズ","meaning":"～と一緒に、～を使って","grade":1},{"word":"without","kana":"ウィズアウト","meaning":"～なしで","grade":3},{"word":"woman","kana":"ウーマン","meaning":"女性","grade":1},{"word":"wonderful","kana":"ワンダフル","meaning":"すばらしい","grade":3},{"word":"wood","kana":"ウッド","meaning":"木材、森","grade":2},{"word":"word","kana":"ワード","meaning":"単語、言葉","grade":1},{"word":"work","kana":"ワーク","meaning":"働く、仕事","grade":1},{"word":"worker","kana":"ワーカー","meaning":"労働者","grade":2},{"word":"world","kana":"ワールド","meaning":"世界","grade":2},{"word":"worry","kana":"ウォリー","meaning":"心配する","grade":3},{"word":"write","kana":"ライト","meaning":"書く","grade":1},{"word":"writer","kana":"ライター","meaning":"作家、書き手","grade":2},{"word":"wrong","kana":"ロング","meaning":"間違った","grade":2},{"word":"X-ray","kana":"エックスレイ","meaning":"X線、レントゲン写真","grade":3},{"word":"year","kana":"イヤー","meaning":"年、1年","grade":1},{"word":"yellow","kana":"イエロー","meaning":"黄色、黄色い","grade":1},{"word":"yes","kana":"イエス","meaning":"はい","grade":1},{"word":"yesterday","kana":"イエスタデイ","meaning":"昨日","grade":2},{"word":"you","kana":"ユー","meaning":"あなたは、あなたを","grade":1},{"word":"young","kana":"ヤング","meaning":"若い","grade":1},{"word":"your","kana":"ユア","meaning":"あなたの","grade":1},{"word":"zebra","kana":"ゼブラ","meaning":"シマウマ","grade":1},{"word":"zero","kana":"ゼロ","meaning":"0","grade":3},{"word":"zoo","kana":"ズー","meaning":"動物園","grade":1}];
+const STORAGE_KEY = "juniorEnglish685_v1";
+const state = loadState();
+let listLetter="ALL", listGrade=0, quizGrade=0, quizMode="mix";
+let quiz=null, dailyQuiz=null, boss=null;
+
+function loadState(){
+  const base={coins:0,streak:0,lastDailyDate:"",lastCompleteDate:"",daily:null,bossClears:0,bestBossScore:0};
+  try{return Object.assign(base,JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}"))}catch(e){return base}
+}
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }catch(e){}
+  updateHeader();
+}
+function localDateKey(){
+  const d=new Date(), y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,"0"), day=String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+function updateHeader(){
+  document.getElementById("coinCount").textContent=state.coins||0;
+  document.getElementById("streakCount").textContent=state.streak||0;
+  document.getElementById("totalWords").textContent=WORDS.length;
+  refreshDailySummary();
+}
+function goPage(name,focusSearch=false){
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  document.getElementById(name+"Page").classList.add("active");
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===name));
+  try{window.scrollTo(0,0)}catch(e){}
+  if(name==="words"){renderWords(); if(focusSearch)setTimeout(()=>document.getElementById("searchInput").focus(),100)}
+  if(name==="daily")refreshDailySummary();
+  if(name!=="boss")stopBossTimer();
+}
+function toast(msg){
+  const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
+  clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove("show"),1800);
+}
+function shuffle(arr,rnd=Math.random){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
+  return a;
+}
+function sample(arr,n,rnd=Math.random){return shuffle(arr,rnd).slice(0,Math.min(n,arr.length))}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+
+const letters=["ALL",..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+document.getElementById("letters").innerHTML=letters.map(l=>`<button class="letter ${l==="ALL"?"active":""}" data-letter="${l}">${l==="ALL"?"ALL":l}</button>`).join("");
+document.getElementById("letters").addEventListener("click",e=>{
+  const b=e.target.closest(".letter");if(!b)return;
+  listLetter=b.dataset.letter;
+  document.querySelectorAll(".letter").forEach(x=>x.classList.toggle("active",x===b));renderWords();
+});
+document.getElementById("wordGradeFilters").addEventListener("click",e=>{
+  const b=e.target.closest(".grade-chip");if(!b)return;
+  listGrade=+b.dataset.grade;document.querySelectorAll("#wordGradeFilters .grade-chip").forEach(x=>x.classList.toggle("active",x===b));renderWords();
+});
+document.getElementById("quizGradeFilters").addEventListener("click",e=>{
+  const b=e.target.closest(".grade-chip");if(!b)return;
+  quizGrade=+b.dataset.grade;document.querySelectorAll("#quizGradeFilters .grade-chip").forEach(x=>x.classList.toggle("active",x===b));
+});
+document.getElementById("quizModeFilters").addEventListener("click",e=>{
+  const b=e.target.closest(".mode-chip");if(!b)return;
+  quizMode=b.dataset.mode;
+  document.querySelectorAll("#quizModeFilters .mode-chip").forEach(x=>x.classList.toggle("active",x===b));
+});
+document.getElementById("searchInput").addEventListener("input",()=>{listLetter="ALL";document.querySelectorAll(".letter").forEach(x=>x.classList.toggle("active",x.dataset.letter==="ALL"));renderWords()});
+
+function renderWords(){
+  const q=document.getElementById("searchInput").value.trim().toLowerCase();
+  let arr=WORDS.filter(w=>{
+    const letterOk=listLetter==="ALL"||w.word[0].toUpperCase()===listLetter;
+    const gradeOk=!listGrade||w.grade===listGrade;
+    const hay=(w.word+" "+w.kana+" "+w.meaning).toLowerCase();
+    return letterOk&&gradeOk&&(!q||hay.includes(q));
+  });
+  document.getElementById("listSummary").textContent=listLetter==="ALL"?"A–Z":listLetter;
+  document.getElementById("wordCount").textContent=`${arr.length}語を表示`;
+  const el=document.getElementById("wordList");
+  if(!arr.length){el.innerHTML=`<div class="empty">該当する単語がありません。</div>`;return}
+  el.innerHTML=arr.map(w=>`<div class="word-card">
+    <div class="word-main"><div class="word-en">${esc(w.word)}</div><div class="word-kana">${esc(w.kana)}</div><div class="word-jp">${esc(w.meaning)}</div></div>
+    <div class="grade-tag">中${w.grade}目安</div>
+  </div>`).join("");
+}
+
+function createQuestionPool(count,grade=0,rng=Math.random,direction="mix",choiceCount=4){
+  const pool=grade?WORDS.filter(w=>w.grade===grade):WORDS;
+  const chosen=sample(pool,count,rng);
+  return chosen.map((w,i)=>{
+    const reverse=direction==="jp2en"?true:direction==="en2jp"?false:rng()<.5;
+    const distractPool=pool.filter(x=>x.word!==w.word);
+    let choices;
+    if(!reverse){
+      choices=sample(distractPool,choiceCount-1,rng).map(x=>x.meaning);
+      choices.push(w.meaning);
+    }else{
+      choices=sample(distractPool,choiceCount-1,rng).map(x=>x.word);
+      choices.push(w.word);
+    }
+    choices=shuffle(choices,rng);
+    return {w,reverse,choices,answer:reverse?w.word:w.meaning};
+  });
+}
+function renderQuestion(target,qobj,index,total,score,mode){
+  const q=qobj[index];
+  const prompt=q.reverse?q.w.meaning:q.w.word;
+  const label=q.reverse?"日本語に合う英単語を選ぼう":"英単語の意味を選ぼう";
+  target.innerHTML=`<div class="quiz-shell">
+    <div class="quiz-meta"><span>${mode==="daily"?"TODAY 50":"10 WORD TEST"}</span><span>${index+1} / ${total}　正解 ${score}</span></div>
+    <div class="quiz-progress"><i style="width:${(index/total)*100}%"></i></div>
+    <div class="prompt-label">${label}</div>
+    <div class="prompt">${esc(prompt)}</div>
+    <div class="prompt-kana">${q.reverse?"":""}</div>
+    <div class="options">${q.choices.map((c,i)=>`<button class="option" data-choice="${esc(c)}">${esc(c)}</button>`).join("")}</div>
+    <div class="feedback"></div>
+    <button class="nextbtn">次の問題へ</button>
+  </div>`;
+  target.querySelectorAll(".option").forEach(btn=>btn.addEventListener("click",()=>answerQuestion(target,q,index,total,mode,btn)));
+}
+function answerQuestion(target,q,index,total,mode,clicked){
+  if(target.dataset.answered==="1")return;target.dataset.answered="1";
+  const chosen=clicked.dataset.choice,correct=chosen===q.answer;
+  target.querySelectorAll(".option").forEach(b=>{
+    b.disabled=true;if(b.dataset.choice===q.answer)b.classList.add("correct");else if(b===clicked)b.classList.add("wrong")
+  });
+  const fb=target.querySelector(".feedback");
+  fb.className="feedback show "+(correct?"ok":"ng");
+  fb.innerHTML=(correct?"✓ 正解！":"✕ 不正解")+"<br>"+esc(q.w.word)+" <span style='color:#5277c7'>"+esc(q.w.kana)+"</span> ＝ "+esc(q.w.meaning);
+  if(mode==="quiz"){if(correct)quiz.score++}
+  else{
+    if(correct)dailyQuiz.score++;
+    state.daily.pos=index+1;state.daily.score=dailyQuiz.score;saveState();refreshDailySummary();
+  }
+  const next=target.querySelector(".nextbtn");next.classList.add("show");
+  next.textContent=index===total-1?"結果を見る":"次の問題へ";
+  next.onclick=()=>{
+    target.dataset.answered="0";
+    if(mode==="quiz"){quiz.pos++; quiz.pos>=total?finishQuiz():renderQuestion(target,quiz.questions,quiz.pos,total,quiz.score,"quiz")}
+    else{dailyQuiz.pos++; state.daily.pos=dailyQuiz.pos;state.daily.score=dailyQuiz.score;saveState(); dailyQuiz.pos>=total?finishDaily():renderQuestion(target,dailyQuiz.questions,dailyQuiz.pos,total,dailyQuiz.score,"daily")}
+  }
+}
+function startQuiz(count){
+  const questions=createQuestionPool(count,quizGrade,Math.random,quizMode,4);
+  quiz={questions,pos:0,score:0};
+  document.getElementById("quizSetup").style.display="none";
+  const area=document.getElementById("quizArea");area.style.display="block";area.dataset.answered="0";
+  renderQuestion(area,questions,0,count,0,"quiz");
+}
+function finishQuiz(){
+  const area=document.getElementById("quizArea"), pct=Math.round(quiz.score/quiz.questions.length*100);
+  let msg=pct===100?"PERFECT！":pct>=80?"かなり覚えています！":pct>=60?"あと少し！": "間違えた単語をもう一度見てみよう。";
+  area.innerHTML=`<div class="quiz-shell result"><div class="score-ring"><div><b>${quiz.score}/10</b><span>${pct}%</span></div></div><h3>${msg}</h3><p>10問テストは何度でも挑戦できます。</p><button class="startbtn" onclick="resetQuiz()">もう一度挑戦</button></div>`;
+}
+function resetQuiz(){document.getElementById("quizArea").style.display="none";document.getElementById("quizSetup").style.display="block";quiz=null}
+
+function hashSeed(str){
+  let h=2166136261;
+  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
+  return h>>>0;
+}
+function mulberry32(a){return function(){let t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+function ensureDaily(){
+  const key=localDateKey();
+  if(!state.daily||state.daily.date!==key){
+    const rng=mulberry32(hashSeed("JUNIOR-ENGLISH-"+key));
+    const qs=createQuestionPool(50,0,rng);
+    state.daily={date:key,pos:0,score:0,completed:false,reward:0,questions:qs.map(q=>({word:q.w.word,reverse:q.reverse,choices:q.choices,answer:q.answer}))};
+    try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch(e){}
+  }
+  return state.daily;
+}
+function hydrateDailyQuestions(saved){
+  return saved.questions.map(x=>{
+    const w=WORDS.find(z=>z.word===x.word);
+    return {w,reverse:x.reverse,choices:x.choices,answer:x.answer};
+  });
+}
+function startDaily(){
+  const d=ensureDaily();
+  if(d.completed){showDailyResult();return}
+  dailyQuiz={questions:hydrateDailyQuestions(d),pos:d.pos||0,score:d.score||0};
+  document.getElementById("dailySetup").style.display="none";
+  const area=document.getElementById("dailyArea");area.style.display="block";area.dataset.answered="0";
+  renderQuestion(area,dailyQuiz.questions,dailyQuiz.pos,50,dailyQuiz.score,"daily");
+}
+function calcReward(score){return score===50?150:score>=45?100:score>=40?50:0}
+function dayDiff(a,b){
+  if(!a||!b)return 999;
+  const A=new Date(a+"T00:00:00"),B=new Date(b+"T00:00:00");return Math.round((B-A)/86400000)
+}
+function finishDaily(){
+  const d=ensureDaily(); if(d.completed){showDailyResult();return}
+  d.completed=true;d.pos=50;d.score=dailyQuiz.score;d.reward=calcReward(d.score);
+  state.coins=(state.coins||0)+d.reward;
+  const today=localDateKey(), diff=dayDiff(state.lastCompleteDate,today);
+  state.streak=diff===1?(state.streak||0)+1:(state.lastCompleteDate===today?state.streak:1);
+  state.lastCompleteDate=today;state.lastDailyDate=today;
+  saveState();showDailyResult();if(d.reward)toast(`🪙 +${d.reward} COIN GET!`);
+}
+function showDailyResult(){
+  const d=ensureDaily(),area=document.getElementById("dailyArea");
+  document.getElementById("dailySetup").style.display="none";area.style.display="block";
+  const pct=Math.round((d.score||0)/50*100);
+  let title=d.score===50?"PERFECT DAY！":d.score>=45?"GREAT！":d.score>=40?"CLEAR！":"FINISH！";
+  area.innerHTML=`<div class="quiz-shell result">
+    <div class="score-ring"><div><b>${d.score}/50</b><span>${pct}%</span></div></div>
+    <h3>${title}</h3><p>今日の50問は完了しました。<br>明日は新しい50問に切り替わります。</p>
+    <div class="reward-card">🎁 本日の報酬：+${d.reward||0} COIN</div>
+    <button class="startbtn" onclick="goPage('words')">単語一覧で復習する</button>
+  </div>`;
+}
+function refreshDailySummary(){
+  const d=ensureDaily();
+  const pos=Math.min(d.pos||0,50),score=d.score||0;
+  document.getElementById("dailyDone").textContent=`${pos}/50`;
+  document.getElementById("dailyScoreMini").textContent=score;
+  document.getElementById("dailyRewardMini").textContent=d.completed?`+${d.reward}`:"MAX 150";
+  document.getElementById("dailyDate").textContent=d.date.replaceAll("-"," / ");
+  document.getElementById("homeDailyBar").style.width=(pos/50*100)+"%";
+  document.getElementById("learnedToday").textContent=pos;
+  document.getElementById("homeAccuracy").textContent=pos?Math.round(score/pos*100)+"%":"--";
+  const start=document.getElementById("dailyStartBtn");
+  if(start)start.textContent=d.completed?"今日の結果を見る":pos>0?`続きから再開（${pos}/50）`:"今日の50問を始める";
+  document.getElementById("homeRewardText").textContent=d.completed?`本日 +${d.reward} COIN 獲得済み`:"最大 +150 COIN";
+}
+
+let bossTimer=null;
+
+function stopBossTimer(){
+  if(bossTimer){clearInterval(bossTimer);bossTimer=null}
+}
+
+function resetBossView(){
+  stopBossTimer();
+  boss=null;
+  const setup=document.getElementById("bossSetup"),battle=document.getElementById("bossBattle");
+  if(setup)setup.style.display="block";
+  if(battle){battle.style.display="none";battle.innerHTML=""}
+}
+
+function startBossBattle(){
+  stopBossTimer();
+  boss={
+    playerHP:10,bossHP:20,maxPlayerHP:10,maxBossHP:20,
+    correct:0,miss:0,specialCorrect:0,questions:0,
+    startedAt:Date.now(),used:new Set(),locked:false,specialUsed:false,fastCorrect:0,questionStartedAt:0
+  };
+  document.getElementById("bossSetup").style.display="none";
+  const battle=document.getElementById("bossBattle");
+  battle.style.display="block";
+  battle.innerHTML=`<div class="boss-arena" id="bossArena">
+    <div class="battle-message" id="battleMsg"></div>
+    <div class="battle-top">
+      <div style="min-width:54px"><div class="fighter-label">YOU</div><div class="hp-text" id="playerHPText">HP 10 / 10</div></div>
+      <div class="hp-wrap"><div class="hp-track"><div class="hp-fill" id="playerHPBar" style="width:100%"></div></div></div>
+    </div>
+    <div class="battle-top" style="margin-top:8px">
+      <div style="min-width:54px"><div class="fighter-label">SLIME</div><div class="hp-text" id="bossHPText">HP 20 / 20</div></div>
+      <div class="hp-wrap"><div class="hp-track"><div class="hp-fill enemy" id="bossHPBar" style="width:100%"></div></div></div>
+    </div>
+    <div class="battle-stage" id="battleStage">
+      <div class="player-unit" id="playerUnit">
+        <div class="player-avatar"><div class="player-sword"></div></div><div class="battle-shadow"></div>
+      </div>
+      <div class="slash" id="slashFx"></div>
+      <div class="enemy-unit" id="enemyUnit">
+        <div class="slime"><div class="slime-mouth"></div></div><div class="battle-shadow"></div>
+      </div>
+    </div>
+    <div class="boss-question" id="bossQuestion"></div>
+    <div class="battle-overlay" id="battleOverlay"></div>
+  </div>`;
+  updateBossHP();
+  renderBossTurnChoice();
+}
+
+function updateBossHP(){
+  const p=Math.max(0,boss.playerHP),e=Math.max(0,boss.bossHP);
+  const pbar=document.getElementById("playerHPBar"),ebar=document.getElementById("bossHPBar");
+  if(pbar)pbar.style.width=(p/boss.maxPlayerHP*100)+"%";
+  if(ebar)ebar.style.width=(e/boss.maxBossHP*100)+"%";
+  const pt=document.getElementById("playerHPText"),et=document.getElementById("bossHPText");
+  if(pt)pt.textContent=`HP ${p} / ${boss.maxPlayerHP}`;
+  if(et)et.textContent=`HP ${e} / ${boss.maxBossHP}`;
+}
+
+function renderBossTurnChoice(){
+  stopBossTimer();
+  if(!boss||boss.playerHP<=0||boss.bossHP<=0)return;
+  boss.locked=false;
+  const q=document.getElementById("bossQuestion");
+  q.className="boss-question";
+  q.innerHTML=`<div class="boss-q-head"><span>CHOOSE ATTACK</span><span>敵HP ${boss.bossHP}</span></div>
+    <div class="boss-q-title" style="font-size:19px;margin-top:18px">攻撃方法を選ぼう</div>
+    <div class="boss-actions">
+      <button class="attack-btn" onclick="startBossQuestion(false)">⚔️ 通常攻撃<small>1.5秒以内 +2 / それ以降 +1</small></button>
+      <button class="special-btn" onclick="startBossQuestion(true)" ${boss.specialUsed?"disabled":""}>${boss.specialUsed?"✓ 必殺 使用済み":"💥 必殺"}<small>${boss.specialUsed?"このバトルでは使用不可":"1回限定 / 難問6択 / +4 DAMAGE"}</small></button>
+    </div>
+    <div class="boss-rule">1問3秒。必殺は1バトルにつき1回だけ使用できます。</div>`;
+}
+
+function pickBossWord(special){
+  let pool;
+  if(special){
+    pool=WORDS.filter(w=>w.grade>=2);
+  }else{
+    const grade=Math.random()<0.85?1:2;
+    pool=WORDS.filter(w=>w.grade===grade);
+  }
+  let available=pool.filter(w=>!boss.used.has(w.word));
+  if(available.length<10){boss.used.clear();available=pool}
+  const w=available[Math.floor(Math.random()*available.length)];
+  boss.used.add(w.word);
+  return w;
+}
+
+function createBossQuestion(special){
+  const w=pickBossWord(special);
+  const direction=special?(Math.random()<.5?"en2jp":"jp2en"):"en2jp";
+  const reverse=direction==="jp2en";
+  const pool=special?WORDS.filter(x=>x.grade>=2):WORDS.filter(x=>x.grade===w.grade);
+  const distract=pool.filter(x=>x.word!==w.word);
+  const count=special?6:4;
+  let choices=reverse?sample(distract,count-1).map(x=>x.word):sample(distract,count-1).map(x=>x.meaning);
+  choices.push(reverse?w.word:w.meaning);
+  choices=shuffle(choices);
+  return {w,reverse,choices,answer:reverse?w.word:w.meaning,special};
+}
+
+function startBossQuestion(special){
+  if(!boss||boss.locked)return;
+  if(special&&boss.specialUsed)return;
+  if(special)boss.specialUsed=true;
+  boss.locked=true;
+  const data=createBossQuestion(special);
+  boss.current=data;boss.questions++;boss.questionStartedAt=performance.now();
+  const q=document.getElementById("bossQuestion");
+  q.className="boss-question"+(special?" special-q":"");
+  q.innerHTML=`<div class="boss-q-head"><span>${special?"💥 SPECIAL / 6 CHOICES":"⚔️ NORMAL / 1.5s FAST HIT"}</span><span>3.0 sec</span></div>
+    <div class="timer-track"><div class="timer-fill" id="bossTimerFill"></div></div>
+    <div class="prompt-label">${data.reverse?"日本語に合う英単語":"英単語の意味"}</div>
+    <div class="boss-q-title">${esc(data.reverse?data.w.meaning:data.w.word)}</div>
+    <div class="boss-q-kana"></div>
+    <div class="boss-options">${data.choices.map(c=>`<button class="boss-option" data-choice="${esc(c)}">${esc(c)}</button>`).join("")}</div>`;
+  q.querySelectorAll(".boss-option").forEach(btn=>btn.addEventListener("click",()=>resolveBossAnswer(btn.dataset.choice,btn)));
+  runBossTimer();
+}
+
+function runBossTimer(){
+  stopBossTimer();
+  const start=performance.now(),duration=3000;
+  bossTimer=setInterval(()=>{
+    if(!boss||!boss.locked){stopBossTimer();return}
+    const elapsed=performance.now()-start;
+    const remain=Math.max(0,1-elapsed/duration);
+    const fill=document.getElementById("bossTimerFill");
+    if(fill){
+      fill.style.width=(remain*100)+"%";
+      if(!boss.current.special)fill.classList.toggle("slow",elapsed>1500);
+    }
+    const label=document.querySelector("#bossQuestion .boss-q-head span:last-child");
+    if(label)label.textContent=(Math.max(0,(duration-elapsed)/1000)).toFixed(1)+" sec";
+    if(elapsed>=duration){
+      stopBossTimer();
+      resolveBossAnswer(null,null,true);
+    }
+  },50);
+}
+
+function resolveBossAnswer(choice,clicked,timedOut=false){
+  if(!boss||!boss.locked)return;
+  stopBossTimer();
+  boss.locked=false;
+  const data=boss.current;
+  const correct=!timedOut&&choice===data.answer;
+  document.querySelectorAll("#bossQuestion .boss-option").forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.choice===data.answer)b.classList.add("correct");
+    else if(b===clicked)b.classList.add("wrong");
+  });
+  const kana=document.querySelector("#bossQuestion .boss-q-kana");
+  if(kana)kana.textContent=`${data.w.word}　${data.w.kana}　＝ ${data.w.meaning}`;
+  if(correct){
+    boss.correct++;
+    const answerMs=Math.max(0,performance.now()-(boss.questionStartedAt||performance.now()));
+    let damage=1;
+    if(data.special){
+      damage=4;
+      boss.specialCorrect++;
+    }else if(answerMs<=1500){
+      damage=2;
+      boss.fastCorrect++;
+    }
+    boss.bossHP=Math.max(0,boss.bossHP-damage);
+    playerAttackAnimation(damage,data.special);
+    showBattleMessage(data.special?"SPECIAL HIT!":damage===2?"FAST HIT! 2 DAMAGE":"HIT! 1 DAMAGE");
+  }else{
+    boss.miss++;
+    boss.playerHP=Math.max(0,boss.playerHP-1);
+    enemyAttackAnimation();
+    showBattleMessage(timedOut?"TIME UP!":"MISS!");
+  }
+  updateBossHP();
+  setTimeout(()=>{
+    if(!boss)return;
+    if(boss.bossHP<=0){finishBossVictory()}
+    else if(boss.playerHP<=0){finishBossDefeat()}
+    else{renderBossTurnChoice()}
+  },780);
+}
+
+function showBattleMessage(msg){
+  const el=document.getElementById("battleMsg");if(!el)return;
+  el.textContent=msg;el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"),650);
+}
+
+function spawnDamage(targetId,text,special=false){
+  const target=document.getElementById(targetId),stage=document.getElementById("battleStage");
+  if(!target||!stage)return;
+  const d=document.createElement("div");d.className="damage-pop"+(special?" special":"");d.textContent=text;
+  const tr=target.getBoundingClientRect(),sr=stage.getBoundingClientRect();
+  d.style.left=(tr.left-sr.left+tr.width/2-18)+"px";d.style.top=(tr.top-sr.top+15)+"px";
+  stage.appendChild(d);setTimeout(()=>d.remove(),800);
+}
+
+function playerAttackAnimation(damage,special){
+  const p=document.getElementById("playerUnit"),e=document.getElementById("enemyUnit"),slash=document.getElementById("slashFx"),arena=document.getElementById("bossArena");
+  if(p){p.classList.remove("attack");void p.offsetWidth;p.classList.add("attack");setTimeout(()=>p.classList.remove("attack"),430)}
+  if(slash){slash.classList.remove("fly");void slash.offsetWidth;slash.classList.add("fly");setTimeout(()=>slash.classList.remove("fly"),430)}
+  setTimeout(()=>{
+    if(e){e.classList.remove("hit");void e.offsetWidth;e.classList.add("hit");setTimeout(()=>e.classList.remove("hit"),430)}
+    if(arena){arena.classList.remove("screen-shake");void arena.offsetWidth;arena.classList.add("screen-shake");setTimeout(()=>arena.classList.remove("screen-shake"),380)}
+    spawnDamage("enemyUnit","-"+damage,special);
+  },220);
+}
+
+function enemyAttackAnimation(){
+  const e=document.getElementById("enemyUnit"),p=document.getElementById("playerUnit"),arena=document.getElementById("bossArena");
+  if(e){e.classList.remove("attack");void e.offsetWidth;e.classList.add("attack");setTimeout(()=>e.classList.remove("attack"),460)}
+  setTimeout(()=>{
+    if(p){p.classList.remove("hit");void p.offsetWidth;p.classList.add("hit");setTimeout(()=>p.classList.remove("hit"),430)}
+    if(arena){arena.classList.remove("screen-shake");void arena.offsetWidth;arena.classList.add("screen-shake");setTimeout(()=>arena.classList.remove("screen-shake"),380)}
+    spawnDamage("playerUnit","-1",false);
+  },220);
+}
+
+function bossScore(){
+  if(!boss)return 0;
+  const elapsed=Math.max(1,Math.round((Date.now()-boss.startedAt)/1000));
+  return Math.max(0,1000 + boss.playerHP*200 + boss.correct*90 + boss.fastCorrect*100 + boss.specialCorrect*220 - boss.miss*60 - elapsed*4);
+}
+
+function animateScore(el,finalScore){
+  const start=performance.now(),duration=950;
+  function tick(now){
+    const t=Math.min(1,(now-start)/duration),v=Math.floor(finalScore*(1-Math.pow(1-t,3)));
+    el.textContent=v.toLocaleString();
+    if(t<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function finishBossVictory(){
+  stopBossTimer();
+  const enemy=document.getElementById("enemyUnit");
+  if(enemy)enemy.classList.add("defeated");
+  const finalScore=bossScore();
+  state.bossClears=(state.bossClears||0)+1;
+  state.bestBossScore=Math.max(state.bestBossScore||0,finalScore);
+  saveState();
+  setTimeout(()=>{
+    const over=document.getElementById("battleOverlay");if(!over)return;
+    over.innerHTML=`<div class="victory-box">
+      <div style="font-size:38px">🏆</div>
+      <div class="victory-title">SLIME CLEAR!</div>
+      <div class="score-label">BATTLE SCORE</div>
+      <div class="score-big" id="bossScoreValue">0</div>
+      <div class="score-breakdown">
+        <div><b>${boss.playerHP}</b><span>HP LEFT</span></div>
+        <div><b>${boss.fastCorrect}</b><span>FAST HIT</span></div>
+        <div><b>${boss.specialCorrect}</b><span>SPECIAL HIT</span></div>
+      </div>
+      <div style="font-size:11px;color:#747b88;font-weight:850">正解 ${boss.correct}問 ／ BEST SCORE：${Math.max(state.bestBossScore||0,finalScore).toLocaleString()}</div>
+      <button class="startbtn" onclick="startBossBattle()">もう一度戦う</button>
+      <button class="backbtn" style="margin-top:8px;width:100%" onclick="resetBossView()">ボス一覧へ</button>
+    </div>`;
+    over.classList.add("show");
+    animateScore(document.getElementById("bossScoreValue"),finalScore);
+  },900);
+}
+
+function finishBossDefeat(){
+  stopBossTimer();
+  const over=document.getElementById("battleOverlay");if(!over)return;
+  over.innerHTML=`<div class="victory-box">
+    <div style="font-size:35px">💫</div>
+    <div class="defeat-title">BATTLE FAILED</div>
+    <p style="font-size:12px;color:#747b88;line-height:1.6">HPが0になりました。<br>中1単語を復習して再挑戦しよう。</p>
+    <div class="score-breakdown">
+      <div><b>${boss.correct}</b><span>CORRECT</span></div>
+      <div><b>${boss.miss}</b><span>MISS / TIME</span></div>
+      <div><b>${20-boss.bossHP}</b><span>DAMAGE</span></div>
+    </div>
+    <button class="startbtn" onclick="startBossBattle()">リトライ</button>
+    <button class="backbtn" style="margin-top:8px;width:100%" onclick="goPage('words')">単語を復習する</button>
+  </div>`;
+  over.classList.add("show");
+}
+
+
+renderWords();
+updateHeader();
+</script>
+</body>
+</html>
